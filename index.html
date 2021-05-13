@@ -38,6 +38,7 @@
         align-items: center;
         flex-direction: column;
         justify-content: center;
+        text-decoration: none;
     }
     .ativo h1{
         font-size: 2rem;
@@ -48,9 +49,6 @@
     .ativo h5{
         font-size: .9rem;
         margin-top: 5px;
-    }
-    .ativos img{
-        margin-top: 40px;
     }
     .loading{
         position: absolute;
@@ -83,14 +81,15 @@
                     
                     ids.forEach((id, index) => {
                         var divTudo = document.getElementById("ativos");
-                        var divNova = document.createElement("div");
+                        var divNova = document.createElement("a");
                         divTudo.appendChild(divNova);
-                        divNova.setAttribute('id', id.asset);
-                        divNova.setAttribute('class', 'ativo');
+                        divNova.setAttribute('id', index);
+                        divNova.setAttribute('href', 'https://ri.ambev.com.br');
+                        divNova.setAttribute('target', '_blank');
 
                         var variation = id.variation.replace(",", ".");
                         
-                        document.getElementById(id.asset).innerHTML = "<h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5>";
+                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
 
                         if(variation >= 0.05){                            
                             document.getElementById(id.asset).style.background = "#215E2D";
