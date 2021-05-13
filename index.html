@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/favicon.png"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400&display=swap" rel="stylesheet">
+    <title>Ativos</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+    body{
+        background-color: #000;
+    }
+    .ativos{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .ativo{
+        width: 300px;
+        text-align: center;
+        border: 1px solid #000;
+        float: left;
+        color: #fff;
+        text-shadow: 0 0 0 #000;
+        letter-spacing: 1px;
+        text-shadow: .5px .5px 0 rgb(51 50 55 / 29%);
+        height: 130px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .ativo h1{
+        font-size: 2rem;
+    }
+    .ativo h4{
+        font-size: 1.1rem;
+    }
+    .ativo h5{
+        font-size: .9rem;
+        margin-top: 5px;
+    }
+    .ativos img{
+        margin-top: 40px;
+    }
+    .loading{
+        position: absolute;
+        top: 50%;  
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .loading span{
+        color: #aaa;
+        position: absolute;
+        top: 105%;  
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+    }
+</style>
+<body>
+<div id="ativos" class="ativos"><div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div></div>
+<script>
+    ativos();
+
+    function ativos(){
+        fetch('https://gsx2json.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+            .then(function(response){
+                response.json().then(function(data){
+
+                    document.getElementById("ativos").innerHTML = "";
+
+                    var ids = data.rows;
+                    
+                    ids.forEach((id, index) => {
+                        var divTudo = document.getElementById("ativos");
+                        var divNova = document.createElement("div");
+                        divTudo.appendChild(divNova);
+                        divNova.setAttribute('id', id.asset);
+                        divNova.setAttribute('class', 'ativo');
+
+                        var variation = id.variation.replace(",", ".");
+                        
+                        document.getElementById(id.asset).innerHTML = "<h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5>";
+
+                        if(variation >= 0.05){                            
+                            document.getElementById(id.asset).style.background = "#215E2D";
+                        }else if(variation > 0){                            
+                            document.getElementById(id.asset).style.background = "#518652";
+                        }else if(variation <= -0.05){
+                            document.getElementById(id.asset).style.background = "#AA2122";
+                        }else if(variation == 0){
+                            document.getElementById(id.asset).style.background = "#7EC17F";
+                        }else{
+                            document.getElementById(id.asset).style.background = "#C84041";
+                        }
+                    });
+                });
+            })
+            .catch(function(err) { console.error(err) }); 
+    }
+
+    setInterval(() => {
+        ativos();
+    }, 10000);
+</script>
+</body>
+</html>
