@@ -14,13 +14,20 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 30px 0;
-    margin: 4px;
+    margin: 10px 4px;
+    background: #111;
+    border-radius: 10px 10px 0 0;
+    transition: .5s;
+}
+.setor:hover{
+    background: #333;
+    transition: .5s;
 }
 .setor h1{
     color: #fff;
     font-size: 14px;
     font-weight: normal;
+    padding: 5px 10px;
 }
 .setorAtivos{
     width: 100%;
@@ -77,6 +84,25 @@ body{
     left: 50%; 
     transform: translate(-50%, -50%);
     font-size: 12px;
+}
+
+/* responsivo */
+
+@media only screen and (min-width: 2300px) {
+    .setor{
+        width: calc(33% - 8px);
+    }
+}
+@media only screen and (max-width: 940px) {
+    .setor{
+        width: 100%;
+        margin: 10px;
+    }
+}
+@media only screen and (max-width: 350px) {
+    .ativo{
+        min-width: 70px;
+    }
 }
 
 /* #bcb2b2 */
