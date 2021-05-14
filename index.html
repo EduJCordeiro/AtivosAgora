@@ -11,68 +11,88 @@
     <title>Ativos Brasil</title>
 </head>
 <body>
+    <div style="color: #fff" id="inicio"></div>
 <div id="ativos" class="ativos"><div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div></div>
 <script>
-    ativos();
+ativos();
 
-    function ativos(){
-        fetch('https://gsx2json.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
-            .then(function(response){
-                response.json().then(function(data){
+function ativos(){
+    fetch('https://gsx2json.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+        .then(function(response){
+            response.json().then(function(data){
 
-                    document.getElementById("ativos").innerHTML = "";
+                document.getElementById("ativos").innerHTML = "";
 
-                    var ids = data.rows;
-                    
-                    ids.forEach((id, index) => {
-                        var divTudo = document.getElementById("ativos");
-                        var setor = document.getElementById('setor'+id.idsector);
+                var ids = data.rows;
+                
+                ids.forEach((id, index) => {
+                    var divTudo = document.getElementById("ativos");
+                    var setor = document.getElementById('setor'+id.idsector);
 
-                        if(setor === null){  
-                            var divSetor = document.createElement("div");
-                            divTudo.appendChild(divSetor);
-                            divSetor.setAttribute('id', 'setor'+id.idsector);
-                            divSetor.setAttribute('class', 'setor');
+                    if(setor === null){  
+                        var divSetor = document.createElement("div");
+                        divTudo.appendChild(divSetor);
+                        divSetor.setAttribute('id', 'setor'+id.idsector);
+                        divSetor.setAttribute('class', 'setor');
 
-                            document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"</h1>";
-                        }else{
-                            var divSetor = document.getElementById('setor'+id.idsector);
-                        }
-
-                        var divAtivo = document.createElement("a");
-                        divSetor.appendChild(divAtivo);
-                        divAtivo.setAttribute('id', index);
-                        if(id.ri != "0"){
-                            divAtivo.setAttribute('href', id.ri);
-                            divAtivo.setAttribute('target', '_blank');
-                        }
-
-                        var variation = id.variation.replace(",", ".");
+                        document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"</h1><div id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
                         
-                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+                        
+                        var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                    }else{
+                        var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                    }
 
-                        if(variation >= 0.05){                            
-                            document.getElementById(id.asset).style.background = "#215E2D";
-                            document.getElementById("v"+index).innerHTML = "+";
-                        }else if(variation > 0){                            
-                            document.getElementById(id.asset).style.background = "#518652";
-                            document.getElementById("v"+index).innerHTML = "+";
-                        }else if(variation <= -0.05){
-                            document.getElementById(id.asset).style.background = "#AA2122";
-                        }else if(variation == 0){
-                            document.getElementById(id.asset).style.background = "#7EC17F";
-                        }else{
-                            document.getElementById(id.asset).style.background = "#C84041";
-                        }
-                    });
+                    var divAtivo = document.createElement("a");
+                    divSetorAtivos.appendChild(divAtivo);
+                    divAtivo.setAttribute('id', index);
+                    if(id.ri != "0"){
+                        divAtivo.setAttribute('href', id.ri);
+                        divAtivo.setAttribute('target', '_blank');
+                    }
+
+                    var variation = id.variation.replace(",", ".");
+                    
+                    document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+
+                    if(variation >= 0.05){                            
+                        document.getElementById(id.asset).style.background = "#215E2D";
+                        document.getElementById("v"+index).innerHTML = "+";
+                    }else if(variation > 0){                            
+                        document.getElementById(id.asset).style.background = "#518652";
+                        document.getElementById("v"+index).innerHTML = "+";
+                    }else if(variation <= -0.05){
+                        document.getElementById(id.asset).style.background = "#AA2122";
+                    }else if(variation == 0){
+                        document.getElementById(id.asset).style.background = "#7EC17F";
+                    }else{
+                        document.getElementById(id.asset).style.background = "#C84041";
+                    }
                 });
-            })
-            .catch(function(err) { console.error(err) }); 
-    }
+            });
+        })
+        .catch(function(err) { console.error(err) }); 
+}
 
-    setInterval(() => {
-        ativos();
-    }, 1000000);
+setInterval(() => {
+    ativos();
+}, 1000000);
+
+function sizeOfThings(){
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+  
+    var calc = (parseFloat(windowWidth) / 2) * 0.15;
+
+    console.log(calc);
+
+};
+
+sizeOfThings();
+
+window.addEventListener('resize', function(){
+	sizeOfThings();
+});
 </script>
 </body>
 </html>
