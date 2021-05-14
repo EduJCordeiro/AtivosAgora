@@ -1,64 +1,62 @@
-<style>
-    *{
-        margin: 0;
-        padding: 0;
-        font-family: 'IBM Plex Sans', sans-serif;
-    }
-    a{
-        text-decoration: none;
-    }
-    body{
-        background-color: #000;
-    }
-    .ativos{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .ativo{
-        width: 300px;
-        text-align: center;
-        border: 1px solid #000;
-        float: left;
-        color: #fff;
-        text-shadow: 0 0 0 #000;
-        letter-spacing: 1px;
-        text-shadow: .5px .5px 0 rgb(51 50 55 / 29%);
-        height: 130px;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-    }
-    .ativo h1{
-        font-size: 2rem;
-    }
-    .ativo h4{
-        font-size: 1.1rem;
-    }
-    .ativo h5{
-        font-size: .9rem;
-        margin-top: 5px;
-    }
-    .loading{
-        position: absolute;
-        top: 50%;  
-        left: 50%; 
-        transform: translate(-50%, -50%);
-    }
-    .loading span{
-        color: #aaa;
-        position: absolute;
-        top: 105%;  
-        left: 50%; 
-        transform: translate(-50%, -50%);
-        font-size: 12px;
-    }
-    .setor h1{
-        color: #fff;
-    }
-    .setor h1{
-        color: #fff;
-    }
-</style>
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+a{
+    text-decoration: none;
+}
+body{
+    background-color: #000;
+}
+.ativos{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.ativo{
+    width: 300px;
+    text-align: center;
+    border: 1px solid #000;
+    float: left;
+    color: #fff;
+    text-shadow: 0 0 0 #000;
+    letter-spacing: 1px;
+    text-shadow: .5px .5px 0 rgb(51 50 55 / 29%);
+    height: 130px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.ativo h1{
+    font-size: 2rem;
+}
+.ativo h4{
+    font-size: 1.1rem;
+}
+.ativo h5{
+    font-size: .9rem;
+    margin-top: 5px;
+}
+.loading{
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+}
+.loading span{
+    color: #aaa;
+    position: absolute;
+    top: 105%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+}
+.setor h1{
+    color: #fff;
+}
+.setor h1{
+    color: #fff;
+}
