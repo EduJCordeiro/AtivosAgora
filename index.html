@@ -93,12 +93,14 @@
 
                         var variation = id.variation.replace(",", ".");
                         
-                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
 
                         if(variation >= 0.05){                            
                             document.getElementById(id.asset).style.background = "#215E2D";
+                            document.getElementById("v"+index).innerHTML = "+";
                         }else if(variation > 0){                            
                             document.getElementById(id.asset).style.background = "#518652";
+                            document.getElementById("v"+index).innerHTML = "+";
                         }else if(variation <= -0.05){
                             document.getElementById(id.asset).style.background = "#AA2122";
                         }else if(variation == 0){
