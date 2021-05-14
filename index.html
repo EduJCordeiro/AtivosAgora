@@ -86,8 +86,10 @@
                         var divNova = document.createElement("a");
                         divTudo.appendChild(divNova);
                         divNova.setAttribute('id', index);
-                        divNova.setAttribute('href', 'https://ri.ambev.com.br');
-                        divNova.setAttribute('target', '_blank');
+                        if(id.ri != "0"){
+                            divNova.setAttribute('href', id.ri);
+                            divNova.setAttribute('target', '_blank');
+                        }
 
                         var variation = id.variation.replace(",", ".");
                         
