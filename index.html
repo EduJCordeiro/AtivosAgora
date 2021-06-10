@@ -74,8 +74,14 @@ function ativos(){
                     }
 
                     var variation = id.variation.replace(",", ".");
+
+                    if(id.name != ''){
+                        var title = id.name;
+                    }else{
+                        var title = id.asset;
+                    }
                     
-                    document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+id.asset+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+                    document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
 
                     if(variation >= 0.05){                            
                         document.getElementById(id.asset).style.background = "#215E2D";
