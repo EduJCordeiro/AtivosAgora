@@ -63,85 +63,82 @@
     ativos();
 
     function ativos(){
-        document.getElementById("ativos").innerHTML = "";
+        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+        .then(function(response){
+            response.json().then(function(data){
 
-        for(var i=1; i<=2;i++){
-        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet='+i, { method: 'GET' })
-            .then(function(response){
-                response.json().then(function(data){
+                document.getElementById("ativos").innerHTML = "";
+                document.getElementById("menunav").style.display = "block";
 
-                    document.getElementById("menunav").style.display = "block";
+                var ids = data.rows;
 
-                    var ids = data.rows;
-
-                    ids.forEach((id, index) => {
-                        if(favoritos_ativo.includes(id.asset)){
-                            var divTudo = document.getElementById("ativos");
-                            var setor = document.getElementById('setor'+id.idsector);
+                ids.forEach((id, index) => {
+                    if(favoritos_ativo.includes(id.asset)){
+                        var divTudo = document.getElementById("ativos");
+                        var setor = document.getElementById('setor'+id.idsector);
 
 
-                            if(localStorage.getItem("setorAtivos"+id.idsector) === null){
-                                localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
-                                localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
-                            } 
+                        if(localStorage.getItem("setorAtivos"+id.idsector) === null){
+                            localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
+                            localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
+                        } 
 
-                            if(setor === null){  
-                                var divSetor = document.createElement("div");
-                                divTudo.appendChild(divSetor);
-                                divSetor.setAttribute('id', 'setor'+id.idsector);
-                                divSetor.setAttribute('class', 'setor');
+                        if(setor === null){  
+                            var divSetor = document.createElement("div");
+                            divTudo.appendChild(divSetor);
+                            divSetor.setAttribute('id', 'setor'+id.idsector);
+                            divSetor.setAttribute('class', 'setor');
 
-                                document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
-                                
-                                
-                                var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                            }else{
-                                var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                            }
-
-                            var divAtivo = document.createElement("a");
-                            divSetorAtivos.appendChild(divAtivo);
-                            divAtivo.setAttribute('id', index);
-                            if(id.ri != "0"){
-                                // divAtivo.setAttribute('href', id.ri);
-                                // divAtivo.setAttribute('target', '_blank');
-                            }
-
-                            var variation = id.variation.replace(",", ".");
-
-                            if(id.name != ''){
-                                var title = id.name;
-                            }else{
-                                var title = id.asset;
-                            }
+                            document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
                             
-                            document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><div id='fav"+id.asset+"'><i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i></div><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
-
-                            if(variation >= 0.05){                            
-                                document.getElementById(id.asset).style.background = "#215E2D";
-                                document.getElementById("v"+index).innerHTML = "+";
-                            }else if(variation > 0){                            
-                                document.getElementById(id.asset).style.background = "#518652";
-                                document.getElementById("v"+index).innerHTML = "+";
-                            }else if(variation <= -0.05){
-                                document.getElementById(id.asset).style.background = "#AA2122";
-                            }else if(variation == 0){
-                                document.getElementById(id.asset).style.background = "#878787";
-                            }else{
-                                document.getElementById(id.asset).style.background = "#C84041";
-                            }
-
-                            if(favoritos_ativo.includes(id.asset)){
-                                document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"rmvFav('"+id.asset+"', '"+id.idsector+"')\" class='fas fa-star fav'></i>";
-                            }else{
-                                document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i>";
-                            }
+                            
+                            var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                        }else{
+                            var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
                         }
-                    });
+
+                        var divAtivo = document.createElement("a");
+                        divSetorAtivos.appendChild(divAtivo);
+                        divAtivo.setAttribute('id', index);
+                        if(id.ri != "0"){
+                            // divAtivo.setAttribute('href', id.ri);
+                            // divAtivo.setAttribute('target', '_blank');
+                        }
+
+                        var variation = id.variation.replace(",", ".");
+
+                        if(id.name != ''){
+                            var title = id.name;
+                        }else{
+                            var title = id.asset;
+                        }
+                        
+                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><div id='fav"+id.asset+"'><i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i></div><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+
+                        if(variation >= 0.05){                            
+                            document.getElementById(id.asset).style.background = "#215E2D";
+                            document.getElementById("v"+index).innerHTML = "+";
+                        }else if(variation > 0){                            
+                            document.getElementById(id.asset).style.background = "#518652";
+                            document.getElementById("v"+index).innerHTML = "+";
+                        }else if(variation <= -0.05){
+                            document.getElementById(id.asset).style.background = "#AA2122";
+                        }else if(variation == 0){
+                            document.getElementById(id.asset).style.background = "#878787";
+                        }else{
+                            document.getElementById(id.asset).style.background = "#C84041";
+                        }
+
+                        if(favoritos_ativo.includes(id.asset)){
+                            document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"rmvFav('"+id.asset+"', '"+id.idsector+"')\" class='fas fa-star fav'></i>";
+                        }else{
+                            document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i>";
+                        }
+                    }
                 });
-            })
-            .catch(function(err) { console.error(err) }); 
-        }
+            });
+        })
+        .catch(function(err) { console.error(err) }); 
     }
 
     setInterval(() => {
