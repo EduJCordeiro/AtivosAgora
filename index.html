@@ -82,7 +82,7 @@
                             divSetor.setAttribute('id', 'setor'+id.idsector);
                             divSetor.setAttribute('class', 'setor');
 
-                            document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.favoritos_ativo+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
+                            document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
                             
                             
                             var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
@@ -94,8 +94,8 @@
                         divSetorAtivos.appendChild(divAtivo);
                         divAtivo.setAttribute('id', index);
                         if(id.ri != "0"){
-                            divAtivo.setAttribute('href', id.ri);
-                            divAtivo.setAttribute('target', '_blank');
+                            // divAtivo.setAttribute('href', id.ri);
+                            // divAtivo.setAttribute('target', '_blank');
                         }
 
                         var variation = id.variation.replace(",", ".");
@@ -174,14 +174,6 @@
 
         document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"addFav('"+ativo+"', '"+setor+"')\" class='far fa-star fav'></i>";
     }
-
-    function filtrar(arr, id) {
-  var res = []
-  for (var i = 0, j = arr.length; i !== j; i++) {
-    if (arr[i].id !== id) res.push(arr[i]);
-  }
-  return res;
-};
     </script>
 </body>
 </html>

@@ -25,14 +25,14 @@
 <body>
     <nav style="display: none;" id="menunav" class="navbar navbar-expand-lg navbar-dark navbar-style">
         <div class="container-fluid">
-        <a class="navbar-brand nav-link" aria-current="page" href="index.html"><img src="images/logo.png" alt="Loading"></a>
+        <a class="navbar-brand nav-link" aria-current="page" href="#"><img src="images/logo.png" alt="Loading"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Favoritos</a>
+                <a class="nav-link" href="favoritos.html">Favoritos</a>
             </li>
             </ul>
             <form class="d-flex">
@@ -44,9 +44,18 @@
     </nav>
 
     <div id="ativos" class="ativos"><div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div></div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script>
+
+    if(localStorage.getItem("favoritos_ativo") === null){
+        localStorage.setItem("favoritos_setor", "0");
+        localStorage.setItem("favoritos_ativo", "0");
+    }
+
+    var favoritos_setor = localStorage.getItem("favoritos_setor").split(',');
+    var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(','); 
+
     ativos();
 
     function ativos(){
@@ -63,7 +72,6 @@
                         var divTudo = document.getElementById("ativos");
                         var setor = document.getElementById('setor'+id.idsector);
 
-                        
                         if(localStorage.getItem("setorAtivos"+id.idsector) === null){
                             localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
                             localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
@@ -87,8 +95,8 @@
                         divSetorAtivos.appendChild(divAtivo);
                         divAtivo.setAttribute('id', index);
                         if(id.ri != "0"){
-                            divAtivo.setAttribute('href', id.ri);
-                            divAtivo.setAttribute('target', '_blank');
+                            // divAtivo.setAttribute('href', id.ri);
+                            // divAtivo.setAttribute('target', '_blank');
                         }
 
                         var variation = id.variation.replace(",", ".");
@@ -99,7 +107,7 @@
                             var title = id.asset;
                         }
                         
-                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><div id='fav"+id.asset+"'><i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i></div><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
 
                         if(variation >= 0.05){                            
                             document.getElementById(id.asset).style.background = "#215E2D";
@@ -113,6 +121,12 @@
                             document.getElementById(id.asset).style.background = "#878787";
                         }else{
                             document.getElementById(id.asset).style.background = "#C84041";
+                        }
+
+                        if(favoritos_ativo.includes(id.asset)){
+                            document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"rmvFav('"+id.asset+"', '"+id.idsector+"')\" class='fas fa-star fav'></i>";
+                        }else{
+                            document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i>";
                         }
                     });
                 });
@@ -139,6 +153,27 @@
 
         localStorage.setItem("setorAtivos"+id , "style='display: none'");
         localStorage.setItem("icon"+id, "<i onclick='max("+id+")' class='fas fa-plus icon'></i>");
+    }
+
+    function addFav(ativo, setor){
+        favoritos_setor.push(setor);
+        localStorage.setItem("favoritos_setor" , favoritos_setor);
+
+        favoritos_ativo.push(ativo);
+        localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
+        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"rmvFav('"+ativo+"', '"+setor+"')\" class='fas fa-star fav'></i>";
+    }
+
+    function rmvFav(ativo, setor){
+        var indice = favoritos_setor.indexOf(setor);
+        favoritos_setor.splice(indice, 1);
+        localStorage.setItem("favoritos_setor" , favoritos_setor);
+
+        favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
+        localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
+        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"addFav('"+ativo+"', '"+setor+"')\" class='far fa-star fav'></i>";
     }
     </script>
 </body>
