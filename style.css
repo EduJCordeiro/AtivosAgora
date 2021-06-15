@@ -4,7 +4,7 @@
     font-family: 'IBM Plex Sans', sans-serif;
 }
 a{
-    text-decoration: none;
+    text-decoration: none!important;
 }
 body{
     background-color: #212529!important;
@@ -49,6 +49,7 @@ body{
     justify-content: left;
 }
 .ativo{
+    position: relative;
     min-width: 130px;
     padding: 10px;
     text-align: center;
@@ -62,6 +63,9 @@ body{
     align-items: center;
     flex-direction: column;
     justify-content: center;
+}
+.ativo:hover .fav{
+    display: block;
 }
 .ativo h1{
     font-size: 1.5rem;
@@ -104,6 +108,33 @@ body{
 .icon:hover{
     background-color: #444;
 }
+.input-dark{
+    background-color: #1a1d20!important;
+    color: #f8f9fa!important;
+    border-color: #f8f9fa!important;
+}
+.navbar-style{
+    background-color: #1a1d20!important;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
+    position: fixed!important;
+    top: 0!important;
+    left: 0!important;
+    width: 100%!important;
+}
+.navbar-title{
+    font-family: 'Righteous', cursive;
+}
+.fav{
+    display: none;
+    position: absolute;
+    right: 7px;
+    top: 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.fav:hover{
+    color: #bbb;
+}
 
 /* responsivo */
 
@@ -122,20 +153,4 @@ body{
     .ativo{
         min-width: 70px;
     }
-}
-.input-dark{
-    background-color: #1a1d20!important;
-    color: #f8f9fa!important;
-    border-color: #f8f9fa!important;
-}
-.navbar-style{
-    background-color: #1a1d20!important;
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
-    position: fixed!important;
-    top: 0!important;
-    left: 0!important;
-    width: 100%!important;
-}
-.navbar-title{
-    font-family: 'Righteous', cursive;
 }
