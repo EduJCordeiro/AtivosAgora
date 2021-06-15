@@ -30,16 +30,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" href="index.html">Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="fiis.html">Fundos Imobiliários</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="favoritos.html">Favoritos</a>
-                </li>
-                </ul>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Início</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="fiis.html">Fundos Imobiliários</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="favoritos.html">Favoritos</a>
+            </li>
+            </ul>
             <form class="d-flex">
             <input class="form-control me-2 input-dark" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
             <button class="btn btn-outline-light" type="submit">Pesquisar</button>
@@ -62,7 +62,7 @@
     ativos();
 
     function ativos(){
-        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=3', { method: 'GET' })
             .then(function(response){
                 response.json().then(function(data){
 
