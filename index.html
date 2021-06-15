@@ -7,11 +7,12 @@
     <link rel="icon" href="images/favicon.png"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link  rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400&family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Ativos Agora</title>
     <script data-ad-client="ca-pub-1667060673303511" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQJNTQS318"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -22,113 +23,123 @@
     </script>
 </head>
 <body>
-    <div style="color: #fff" id="inicio"></div>
-<div id="ativos" class="ativos"><div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div></div>
+    <nav style="display: none;" id="menunav" class="navbar navbar-expand-lg navbar-dark navbar-style">
+        <div class="container-fluid">
+        <a class="navbar-brand nav-link" aria-current="page" href="#"><img src="images/logo.png" alt="Loading"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="favoritos.html">Favoritos</a>
+            </li>
+            </ul>
+            <form class="d-flex">
+            <input class="form-control me-2 input-dark" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+            <button class="btn btn-outline-light" type="submit">Pesquisar</button>
+            </form>
+        </div>
+        </div>
+    </nav>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <div id="ativos" class="ativos"><div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div></div>
 
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1667060673303511"
-     data-ad-slot="4632141629"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-<script>
-ativos();
-
-function ativos(){
-    fetch('https://gsx2json.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
-        .then(function(response){
-            response.json().then(function(data){
-
-                document.getElementById("ativos").innerHTML = "";
-
-                var ids = data.rows;
-                
-                ids.forEach((id, index) => {
-                    var divTudo = document.getElementById("ativos");
-                    var setor = document.getElementById('setor'+id.idsector);
-
-                    
-                    if(localStorage.getItem("setorAtivos"+id.idsector) === null){
-                        localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
-                        localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
-                    } 
-
-                    if(setor === null){  
-                        var divSetor = document.createElement("div");
-                        divTudo.appendChild(divSetor);
-                        divSetor.setAttribute('id', 'setor'+id.idsector);
-                        divSetor.setAttribute('class', 'setor');
-
-                        document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
-                        
-                        
-                        var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                    }else{
-                        var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                    }
-
-                    var divAtivo = document.createElement("a");
-                    divSetorAtivos.appendChild(divAtivo);
-                    divAtivo.setAttribute('id', index);
-                    if(id.ri != "0"){
-                        divAtivo.setAttribute('href', id.ri);
-                        divAtivo.setAttribute('target', '_blank');
-                    }
-
-                    var variation = id.variation.replace(",", ".");
-
-                    if(id.name != ''){
-                        var title = id.name;
-                    }else{
-                        var title = id.asset;
-                    }
-                    
-                    document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
-
-                    if(variation >= 0.05){                            
-                        document.getElementById(id.asset).style.background = "#215E2D";
-                        document.getElementById("v"+index).innerHTML = "+";
-                    }else if(variation > 0){                            
-                        document.getElementById(id.asset).style.background = "#518652";
-                        document.getElementById("v"+index).innerHTML = "+";
-                    }else if(variation <= -0.05){
-                        document.getElementById(id.asset).style.background = "#AA2122";
-                    }else if(variation == 0){
-                        document.getElementById(id.asset).style.background = "#878787";
-                    }else{
-                        document.getElementById(id.asset).style.background = "#C84041";
-                    }
-                });
-            });
-        })
-        .catch(function(err) { console.error(err) }); 
-}
-
-setInterval(() => {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
     ativos();
-}, 10000);
 
-function max(id){
-    document.getElementById("icon"+id).innerHTML = "<i onclick='min("+id+")' class='fas fa-minus icon'></i>";
+    function ativos(){
+        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+            .then(function(response){
+                response.json().then(function(data){
 
-    document.getElementById("setorAtivos"+id).style.display = "flex";
+                    document.getElementById("ativos").innerHTML = "";
+                    document.getElementById("menunav").style.display = "block";
 
-    localStorage.setItem("setorAtivos"+id , "style='display: flex'");
-    localStorage.setItem("icon"+id, "<i onclick='min("+id+")' class='fas fa-minus icon'></i>");
-}
-function min(id){
-    document.getElementById("icon"+id).innerHTML = "<i onclick='max("+id+")' class='fas fa-plus icon'></i>";
+                    var ids = data.rows;
+                    
+                    ids.forEach((id, index) => {
+                        var divTudo = document.getElementById("ativos");
+                        var setor = document.getElementById('setor'+id.idsector);
 
-    document.getElementById("setorAtivos"+id).style.display = "none";
+                        
+                        if(localStorage.getItem("setorAtivos"+id.idsector) === null){
+                            localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
+                            localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
+                        } 
 
-    localStorage.setItem("setorAtivos"+id , "style='display: none'");
-    localStorage.setItem("icon"+id, "<i onclick='max("+id+")' class='fas fa-plus icon'></i>");
-}
-</script>
+                        if(setor === null){  
+                            var divSetor = document.createElement("div");
+                            divTudo.appendChild(divSetor);
+                            divSetor.setAttribute('id', 'setor'+id.idsector);
+                            divSetor.setAttribute('class', 'setor');
+
+                            document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
+                            
+                            
+                            var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                        }else{
+                            var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                        }
+
+                        var divAtivo = document.createElement("a");
+                        divSetorAtivos.appendChild(divAtivo);
+                        divAtivo.setAttribute('id', index);
+                        if(id.ri != "0"){
+                            divAtivo.setAttribute('href', id.ri);
+                            divAtivo.setAttribute('target', '_blank');
+                        }
+
+                        var variation = id.variation.replace(",", ".");
+
+                        if(id.name != ''){
+                            var title = id.name;
+                        }else{
+                            var title = id.asset;
+                        }
+                        
+                        document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
+
+                        if(variation >= 0.05){                            
+                            document.getElementById(id.asset).style.background = "#215E2D";
+                            document.getElementById("v"+index).innerHTML = "+";
+                        }else if(variation > 0){                            
+                            document.getElementById(id.asset).style.background = "#518652";
+                            document.getElementById("v"+index).innerHTML = "+";
+                        }else if(variation <= -0.05){
+                            document.getElementById(id.asset).style.background = "#AA2122";
+                        }else if(variation == 0){
+                            document.getElementById(id.asset).style.background = "#878787";
+                        }else{
+                            document.getElementById(id.asset).style.background = "#C84041";
+                        }
+                    });
+                });
+            })
+            .catch(function(err) { console.error(err) }); 
+    }
+
+    setInterval(() => {
+        ativos();
+    }, 10000);
+
+    function max(id){
+        document.getElementById("icon"+id).innerHTML = "<i onclick='min("+id+")' class='fas fa-minus icon'></i>";
+
+        document.getElementById("setorAtivos"+id).style.display = "flex";
+
+        localStorage.setItem("setorAtivos"+id , "style='display: flex'");
+        localStorage.setItem("icon"+id, "<i onclick='min("+id+")' class='fas fa-minus icon'></i>");
+    }
+    function min(id){
+        document.getElementById("icon"+id).innerHTML = "<i onclick='max("+id+")' class='fas fa-plus icon'></i>";
+
+        document.getElementById("setorAtivos"+id).style.display = "none";
+
+        localStorage.setItem("setorAtivos"+id , "style='display: none'");
+        localStorage.setItem("icon"+id, "<i onclick='max("+id+")' class='fas fa-plus icon'></i>");
+    }
+    </script>
 </body>
 </html>

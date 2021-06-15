@@ -7,7 +7,7 @@ a{
     text-decoration: none;
 }
 body{
-    background-color: #000;
+    background-color: #212529!important;
 }
 .setor{
     width: calc(50% - 8px);
@@ -15,12 +15,12 @@ body{
     flex-direction: column;
     height: 100%;
     margin: 10px 4px;
-    background: #111;
+    background: #1a1d20;
     border-radius: 10px;
     transition: .5s;
 }
 .setor:hover{
-    background: #333;
+    background: #292E33;
     transition: .5s;
 }
 .setor h1{
@@ -28,6 +28,7 @@ body{
     font-size: 14px;
     font-weight: normal;
     padding: 5px 10px;
+    margin: 0!important;
 }
 .setorAtivos{
     width: 100%;
@@ -41,6 +42,7 @@ body{
     flex: 1;
 }
 .ativos{
+    margin-top: 70px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -84,6 +86,7 @@ body{
     left: 50%; 
     transform: translate(-50%, -50%);
     font-size: 12px;
+    margin-top: 10px;
 }
 .dIcon{
     float: right;
@@ -120,5 +123,19 @@ body{
         min-width: 70px;
     }
 }
-
-/* #bcb2b2 */
+.input-dark{
+    background-color: #1a1d20!important;
+    color: #f8f9fa!important;
+    border-color: #f8f9fa!important;
+}
+.navbar-style{
+    background-color: #1a1d20!important;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
+    position: fixed!important;
+    top: 0!important;
+    left: 0!important;
+    width: 100%!important;
+}
+.navbar-title{
+    font-family: 'Righteous', cursive;
+}
