@@ -63,11 +63,13 @@
     ativos();
 
     function ativos(){
-        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+        document.getElementById("ativos").innerHTML = "";
+
+        for(var i=1; i<=2;i++){
+        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet='+i, { method: 'GET' })
             .then(function(response){
                 response.json().then(function(data){
 
-                    document.getElementById("ativos").innerHTML = "";
                     document.getElementById("menunav").style.display = "block";
 
                     var ids = data.rows;
@@ -139,6 +141,7 @@
                 });
             })
             .catch(function(err) { console.error(err) }); 
+        }
     }
 
     setInterval(() => {
