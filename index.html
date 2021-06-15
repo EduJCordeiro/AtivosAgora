@@ -48,11 +48,9 @@
     <script>
 
     if(localStorage.getItem("favoritos_ativo") === null){
-        localStorage.setItem("favoritos_setor", "0");
         localStorage.setItem("favoritos_ativo", "0");
     }
 
-    var favoritos_setor = localStorage.getItem("favoritos_setor").split(',');
     var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(','); 
 
     ativos();
@@ -154,25 +152,18 @@
         localStorage.setItem("icon"+id, "<i onclick='max("+id+")' class='fas fa-plus icon'></i>");
     }
 
-    function addFav(ativo, setor){
-        favoritos_setor.push(setor);
-        localStorage.setItem("favoritos_setor" , favoritos_setor);
-
+    function addFav(ativo){
         favoritos_ativo.push(ativo);
         localStorage.setItem("favoritos_ativo" , favoritos_ativo);
 
-        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"rmvFav('"+ativo+"', '"+setor+"')\" class='fas fa-star fav'></i>";
+        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"rmvFav('"+ativo+"')\" class='fas fa-star fav'></i>";
     }
 
     function rmvFav(ativo, setor){
-        var indice = favoritos_setor.indexOf(setor);
-        favoritos_setor.splice(indice, 1);
-        localStorage.setItem("favoritos_setor" , favoritos_setor);
-
         favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
         localStorage.setItem("favoritos_ativo" , favoritos_ativo);
 
-        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"addFav('"+ativo+"', '"+setor+"')\" class='far fa-star fav'></i>";
+        document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"addFav('"+ativo+"')\" class='far fa-star fav'></i>";
     }
     </script>
 </body>
