@@ -10,8 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400&family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Ativos Agora</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="select2.css">
+    <script type="text/javascript" src="select2.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQJNTQS318"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -40,10 +42,8 @@
                 <a class="nav-link" href="favoritos.html">Favoritos</a>
             </li>
             </ul>
-            <form class="d-flex">
-            <input class="form-control me-2 input-dark" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
-            <button class="btn btn-outline-light" type="submit">Pesquisar</button>
-            </form>
+            
+            <select class="js-example-placeholder-multiple js-states form-control" multiple="" id="select" onchange="setSelect()"></select>
         </div>
         </div>
     </nav>
@@ -52,6 +52,17 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script>
+    $(".js-example-placeholder-multiple").select2({
+        placeholder: "Pesquisar"
+    });
+
+    function setSelect(){
+        localStorage.setItem("selectOptions", $('#select').val());
+        ativos();
+    }
+
+    localStorage.setItem("selectOptions", '');
+    localStorage.setItem("controlSelect", '0');
 
     if(localStorage.getItem("favoritos_ativo") === null){
         localStorage.setItem("favoritos_ativo", "0");
@@ -73,67 +84,83 @@
                     
                     ids.forEach((id, index) => {
                         if(id.type == 'fii'){
-                            var divTudo = document.getElementById("ativos");
-                            var setor = document.getElementById('setor'+id.idsector);
+                            if(localStorage.getItem("controlSelect") == 0){
+                                if(id.name == 0){
+                                    var option = id.asset;
+                                }else{
+                                    var option = id.name;
+                                }
+                                if(localStorage.getItem("selectOptions").includes(id.asset)){
+                                    $("#select").append('<option value="'+id.asset+'" selected>'+option+'</option>');
+                                }else{
+                                    $("#select").append('<option value="'+id.asset+'">'+option+'</option>');
+                                }
+                            }
 
-                            if(localStorage.getItem("setorAtivos"+id.idsector) === null){
-                                localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
-                                localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
-                            } 
+                            if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
+                                var divTudo = document.getElementById("ativos");
+                                var setor = document.getElementById('setor'+id.idsector);
 
-                            if(setor === null){  
-                                var divSetor = document.createElement("div");
-                                divTudo.appendChild(divSetor);
-                                divSetor.setAttribute('id', 'setor'+id.idsector);
-                                divSetor.setAttribute('class', 'setor');
+                                if(localStorage.getItem("setorAtivos"+id.idsector) === null){
+                                    localStorage.setItem("setorAtivos"+id.idsector , "style='display: flex'");
+                                    localStorage.setItem("icon"+id.idsector, "<i onclick='min("+id.idsector+")' class='fas fa-minus icon'></i>");
+                                } 
 
-                                document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
+                                if(setor === null){  
+                                    var divSetor = document.createElement("div");
+                                    divTudo.appendChild(divSetor);
+                                    divSetor.setAttribute('id', 'setor'+id.idsector);
+                                    divSetor.setAttribute('class', 'setor');
+
+                                    document.getElementById('setor'+id.idsector).innerHTML = "<h1>"+id.sector+"<div class='dIcon' id='icon"+id.idsector+"'>"+localStorage.getItem("icon"+id.idsector)+"</div></h1><div "+localStorage.getItem("setorAtivos"+id.idsector)+" id='setorAtivos"+id.idsector+"' class='setorAtivos'></div>";
+                                    
+                                    
+                                    var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                                }else{
+                                    var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
+                                }
+
+                                var divAtivo = document.createElement("a");
+                                divSetorAtivos.appendChild(divAtivo);
+                                divAtivo.setAttribute('id', index);
+                                if(id.ri != "0"){
+                                    // divAtivo.setAttribute('href', id.ri);
+                                    // divAtivo.setAttribute('target', '_blank');
+                                }
+
+                                var variation = id.variation.replace(",", ".");
+
+                                if(id.name != ''){
+                                    var title = id.name;
+                                }else{
+                                    var title = id.asset;
+                                }
                                 
-                                
-                                var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                            }else{
-                                var divSetorAtivos = document.getElementById('setorAtivos'+id.idsector);
-                            }
+                                document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><div id='fav"+id.asset+"'><i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i></div><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
 
-                            var divAtivo = document.createElement("a");
-                            divSetorAtivos.appendChild(divAtivo);
-                            divAtivo.setAttribute('id', index);
-                            if(id.ri != "0"){
-                                // divAtivo.setAttribute('href', id.ri);
-                                // divAtivo.setAttribute('target', '_blank');
-                            }
+                                if(variation >= 0.05){                            
+                                    document.getElementById(id.asset).style.background = "#215E2D";
+                                    document.getElementById("v"+index).innerHTML = "+";
+                                }else if(variation > 0){                            
+                                    document.getElementById(id.asset).style.background = "#518652";
+                                    document.getElementById("v"+index).innerHTML = "+";
+                                }else if(variation <= -0.05){
+                                    document.getElementById(id.asset).style.background = "#AA2122";
+                                }else if(variation == 0){
+                                    document.getElementById(id.asset).style.background = "#878787";
+                                }else{
+                                    document.getElementById(id.asset).style.background = "#C84041";
+                                }
 
-                            var variation = id.variation.replace(",", ".");
-
-                            if(id.name != ''){
-                                var title = id.name;
-                            }else{
-                                var title = id.asset;
-                            }
-                            
-                            document.getElementById(index).innerHTML = "<div id='"+id.asset+"' class='ativo'><div id='fav"+id.asset+"'><i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i></div><h1>"+title+"</h1><h4>"+id.price+"</h4><h5><span id='v"+index+"'></span>"+(parseFloat(variation) * 100).toFixed(2).replace('.', ',')+"%</h5></div>";
-
-                            if(variation >= 0.05){                            
-                                document.getElementById(id.asset).style.background = "#215E2D";
-                                document.getElementById("v"+index).innerHTML = "+";
-                            }else if(variation > 0){                            
-                                document.getElementById(id.asset).style.background = "#518652";
-                                document.getElementById("v"+index).innerHTML = "+";
-                            }else if(variation <= -0.05){
-                                document.getElementById(id.asset).style.background = "#AA2122";
-                            }else if(variation == 0){
-                                document.getElementById(id.asset).style.background = "#878787";
-                            }else{
-                                document.getElementById(id.asset).style.background = "#C84041";
-                            }
-
-                            if(favoritos_ativo.includes(id.asset)){
-                                document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"rmvFav('"+id.asset+"', '"+id.idsector+"')\" class='fas fa-star fav'></i>";
-                            }else{
-                                document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i>";
+                                if(favoritos_ativo.includes(id.asset)){
+                                    document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"rmvFav('"+id.asset+"', '"+id.idsector+"')\" class='fas fa-star fav'></i>";
+                                }else{
+                                    document.getElementById("fav"+id.asset).innerHTML = "<i onclick=\"addFav('"+id.asset+"', '"+id.idsector+"')\" class='far fa-star fav'></i>";
+                                }
                             }
                         }
                     });
+                    localStorage.setItem("controlSelect", '1');
                 });
             })
             .catch(function(err) { console.error(err) }); 
