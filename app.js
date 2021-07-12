@@ -2,20 +2,19 @@
 localStorage.setItem("selectOptions", '');
 localStorage.setItem("controlSelect", '0');
 
-function setSelect(){
+function setSelect(tipo){
   localStorage.setItem("selectOptions", $('#select').val());
-  teste1111();
+  showTreemap(tipo);
 }
     
-function teste1111(){
-
+function showTreemap(tipo){
 var loop = [];
 let data22 = [];
 // let data223 = [];
 let dataTeste = '{ "name": "ASSETS", "children": [';
 
 fetch(
-  "https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1&q=fii",
+  "https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1",
   { method: "GET" }
 )
   .then(function (response) {
@@ -23,36 +22,38 @@ fetch(
       var ids = res.rows;
 
       ids.forEach((id, index) => {
-        if(localStorage.getItem("controlSelect") == 0){
-            if(id.name == 0){
-                var option = id.asset;
-            }else{
-                var option = id.name;
-            }
-            if(localStorage.getItem("selectOptions").includes(id.asset)){
-                $("#select").append('<option value="'+id.asset+'" selected>'+option+'</option>');
-            }else{
-                $("#select").append('<option value="'+id.asset+'">'+option+'</option>');
-            }
-        }
+        if(id.type == tipo){
+          if(localStorage.getItem("controlSelect") == 0){
+              if(id.name == 0){
+                  var option = id.asset;
+              }else{
+                  var option = id.name;
+              }
+              if(localStorage.getItem("selectOptions").includes(id.asset)){
+                  $("#select").append('<option value="'+id.asset+'" selected>'+option+'</option>');
+              }else{
+                  $("#select").append('<option value="'+id.asset+'">'+option+'</option>');
+              }
+          }
 
-        if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
-        
-        let data223 = [];
-        if (!loop.includes(id.sector)) {
-          loop.push(id.sector);
-        }
+          if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
+            
+            let data223 = [];
+            if (!loop.includes(id.sector)) {
+              loop.push(id.sector);
+            }
 
-        data223.push({
-          idsector: id.idsector,
-          sector: id.sector,
-          name: id.asset,
-          price: id.price,
-          pc: id.variation,
-          volume: id.volume,
-        });
-        data22.push(data223);
-      }
+            data223.push({
+              idsector: id.idsector,
+              sector: id.sector,
+              name: id.asset,
+              price: id.price,
+              pc: id.variation,
+              volume: id.volume,
+            });
+            data22.push(data223);
+          }
+        }
       });
 
       localStorage.setItem("controlSelect", '1');
@@ -222,7 +223,7 @@ fetch(
           // Add a <tspan class="author"> for every data element.
           txt
             .append("tspan")
-            .text((d) => (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2)}%` : `${(d.data.pc*100).toFixed(2)}%`))
+            .text((d) => (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
             .attr("class", "percent")
             .attr("dy", "1.4em")
             .attr("x", function () {
@@ -280,18 +281,12 @@ fetch(
         chart();
       }
 
-      // Draw for the first time to initialize.
       redraw();
 
-      // Redraw based on the new size whenever the browser window is resized.
       window.addEventListener("resize", redraw);
 
-      // // ZOOM Function
-      // var instance = panzoom(document.getElementById("chart"), {
-      //   zoomSpeed: 0.06,
-      //   maxZoom: 20,
-      //   minZoom: 1,
-      // });
+      $('.loading').remove();
+      $('#menunav').show();
     });
   })
   .catch(function (err) {
@@ -345,13 +340,4 @@ function addFav(ativo){
     favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
     localStorage.setItem("favoritos_ativo" , favoritos_ativo);
   }
-
-
-  // document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"rmvFav('"+ativo+"')\" class='fas fa-star fav'></i>";
-}
-
-function rmvFav(ativo, setor){
-  
-
-  // document.getElementById("fav"+ativo).innerHTML = "<i onclick=\"addFav('"+ativo+"')\" class='far fa-star fav'></i>";
 }
