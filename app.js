@@ -209,7 +209,6 @@ fetch(
             });
 
           // Add a <tspan class="author"> for every data element.
-
           txt
             .append("tspan")
             .text((d) => 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1."))
@@ -236,6 +235,7 @@ fetch(
             .selectAll("titles")
             .data(
               root.descendants().filter(function (d) {
+                var teste1 = Math.max(d.x1 - d.x0, d.y1 - d.y0) / 35;
                 return d.depth == 1;
               })
             )
@@ -249,8 +249,16 @@ fetch(
             .attr("x", (d) => d.x0 + 3)
             .attr("y", (d) => d.y0 + 18)
             .text((d) => d.data.name)
-            // .attr("font-size", d => Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22)
-            .attr("font-size", "16px")
+            // .attr("font-size", d => Math.max(d.x1 - d.x0, d.y1 - d.y0) / 35)
+            .attr("font-size", function (d) {
+              if(Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22 > 16){
+                return 16;
+              }else if(Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22 < 6){
+                return 8;
+              }else{
+                return Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22;
+              }
+            })
             .attr("font-weight", "400")
             .attr("fill", "#fff");
 
@@ -259,7 +267,17 @@ fetch(
 
         let filteredData = d3
           .hierarchy(data)
-          .sum((d) => d.volume)
+          .sum(function (d) {
+            return d.volume;
+            // if(d.volume > 10000000){
+            //   return 10000000;
+            // }else if(d.volume < 100000){
+            //   return 100000;
+            // }else{
+            //   return 100000;
+            // }
+          })
+          // .sum((d) => d.volume)
           .sort((a, b) => b.height - a.height || b.value - a.value);
 
         let reg = d3.selectAll("input[name='dtype']").on("change", function () {
@@ -270,7 +288,7 @@ fetch(
           .treemap()
           .size([width, height])
           .padding(1)
-          .paddingRight(3)
+          .paddingRight(1)
           .paddingTop(25)
           .round(true);
 
