@@ -9,9 +9,8 @@ function setSelect(tipo){
     
 function showTreemap(tipo){
 var loop = [];
-let data22 = [];
-// let data223 = [];
-let dataTeste = '{ "name": "ASSETS", "children": [';
+let arrayMain = [];
+let dadosJson = '{ "name": "ASSETS", "children": [';
 
 fetch(
   "https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1",
@@ -38,20 +37,22 @@ fetch(
 
           if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
             
-            let data223 = [];
+            let arrayDados = [];
             if (!loop.includes(id.sector)) {
               loop.push(id.sector);
             }
 
-            data223.push({
+            arrayDados.push({
               idsector: id.idsector,
               sector: id.sector,
               name: id.asset,
               price: id.price,
               pc: id.variation,
               volume: id.volume,
+              type: id.type,
+              name_asset: id.name,
             });
-            data22.push(data223);
+            arrayMain.push(arrayDados);
           }
         }
       });
@@ -59,59 +60,67 @@ fetch(
       localStorage.setItem("controlSelect", '1');
       
       for (var y = 0; y < loop.length; y++) {
-        var teste111 = 0;
-        for (var x = 0; x < data22.length; x++) {
+        var contador = 0;
+        for (var x = 0; x < arrayMain.length; x++) {
           var z = parseInt(x) + parseInt(1);
-          if (loop[y] == data22[x][0].sector) {
-            if (teste111 == 0) {
-              dataTeste +=
+          if (loop[y] == arrayMain[x][0].sector) {
+            if (contador == 0) {
+              dadosJson +=
                 '{"name": "' +
                 loop[y] +
                 '", "children" :[{"name" :"' +
-                data22[x][0].name +
+                  arrayMain[x][0].name +
                 '","price" :"' +
-                data22[x][0].price
+                  arrayMain[x][0].price
                   .replace(/\./g, "")
                   .replace(/\,/g, ".")
                   .replace(/[^0-9\.]+/g, "") +
                 '","pc" :"' +
-                data22[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
+                  arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
                 '", "volume": ' +
-                data22[x][0].volume +
+                  arrayMain[x][0].volume +
                 ', "idsector": ' +
-                data22[x][0].idsector +
-                '}';
+                  arrayMain[x][0].idsector +
+                  ', "type": "' +
+                  arrayMain[x][0].type +
+                  '", "name_asset": "' +
+                  arrayMain[x][0].name_asset +
+                '"}';
             } else {
-              dataTeste +=
+              dadosJson +=
                 ', {"name" :"' +
-                data22[x][0].name +
+                  arrayMain[x][0].name +
                 '","price" :"' +
-                data22[x][0].price
+                  arrayMain[x][0].price
                   .replace(/\./g, "")
                   .replace(/\,/g, ".")
                   .replace(/[^0-9\.]+/g, "") +
                 '","pc" :"' +
-                data22[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
+                  arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
                 '", "volume": ' +
-                data22[x][0].volume +
-                ', "idsector": ' +
-                data22[x][0].idsector +
-                '}';
+                  arrayMain[x][0].volume +
+                  ', "idsector": ' +
+                  arrayMain[x][0].idsector +
+                  ', "type": "' +
+                  arrayMain[x][0].type +
+                  '", "name_asset": "' +
+                  arrayMain[x][0].name_asset +
+                  '"}';
             }
-            if (data22[z] != undefined) {
-              if (loop[y] != data22[z][0].sector) {
-                dataTeste += "]}, ";
+            if (arrayMain[z] != undefined) {
+              if (loop[y] != arrayMain[z][0].sector) {
+                dadosJson += "]}, ";
               }
             } else {
-              dataTeste += "]}";
+              dadosJson += "]}";
             }
-            teste111++;
+            contador++;
           }
         }
       }
-      dataTeste += "]}";
+      dadosJson += "]}";
 
-      let data = JSON.parse(dataTeste);
+      let data = JSON.parse(dadosJson);
 
       let chartDiv = document.getElementById("chart");
       let svg = d3.select(chartDiv).append("svg");
@@ -157,7 +166,6 @@ fetch(
             .append("g")
             .attr("transform", d => `translate(${d.x0},${d.y0})`)
             .on("click", function (d) {
-              // console.log(d)
               tooltip.style("opacity", 1);
               $('#tooltip').html(`<div class="tooltip-body" style="color: #fff" data-id=${d.data.name} >
                 <ul>
@@ -195,36 +203,52 @@ fetch(
             })
             // .attr("x", "1.7em")
             // .attr("unicode-bidi","isolate-override")
-            .attr("font-size", (d) => Math.min(d.x1 - d.x0, d.y1 - d.y0) / 6);
+            .attr("font-size", (d) => Math.min(d.x1 - d.x0, d.y1 - d.y0) / 7);
 
           // Add a <tspan class="title"> for every data element.
           txt
             .append("tspan")
-            .html((d) => d.data.name)
+            .html(function (d) {
+              if(d.data.name_asset != '0'){
+                return d.data.name_asset;
+              }else{
+                return d.data.name;
+              }
+            })
             .attr("class", "title")
-            .attr("dy", "-1.5em")
+            .attr("dy", "-1em")
+            .attr("font-size", (d) => Math.min(d.x1 - d.x0, d.y1 - d.y0) / 5)
             .attr("x", function () {
               const parentData = d3.select(this.parentNode).datum();
               return (parentData.x1 - parentData.x0) / 2;
             });
+
+          txt
+              .append("tspan")
+              .text(function (d) {
+                if(d.data.name.indexOf('/USD') !== -1){
+                  return '$'+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+                }
+                if(d.data.idsector == '14'){
+                    return (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+                }else{
+                  return 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+                }
+              })
+              .attr("class", "price")
+              .attr("dy", "1.8em")
+              .attr("x", function () {
+                const parentData = d3.select(this.parentNode).datum();
+                return (parentData.x1 - parentData.x0) / 2;
+              });
 
           // Add a <tspan class="author"> for every data element.
-          txt
-            .append("tspan")
-            .text((d) => 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1."))
-            .attr("class", "price")
-            .attr("dy", "1.4em")
-            .attr("x", function () {
-              const parentData = d3.select(this.parentNode).datum();
-              return (parentData.x1 - parentData.x0) / 2;
-            });
-
           // Add a <tspan class="author"> for every data element.
           txt
             .append("tspan")
             .text((d) => (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
             .attr("class", "percent")
-            .attr("dy", "1.4em")
+            .attr("dy", "1.8em")
             .attr("x", function () {
               const parentData = d3.select(this.parentNode).datum();
               return (parentData.x1 - parentData.x0) / 2;
@@ -235,7 +259,6 @@ fetch(
             .selectAll("titles")
             .data(
               root.descendants().filter(function (d) {
-                var teste1 = Math.max(d.x1 - d.x0, d.y1 - d.y0) / 35;
                 return d.depth == 1;
               })
             )
@@ -259,7 +282,7 @@ fetch(
                 return Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22;
               }
             })
-            .attr("font-weight", "400")
+            .attr("font-weight", "bold")
             .attr("fill", "#fff");
 
           return svg.node();
@@ -268,16 +291,26 @@ fetch(
         let filteredData = d3
           .hierarchy(data)
           .sum(function (d) {
-            return d.volume;
-            // if(d.volume > 10000000){
-            //   return 10000000;
-            // }else if(d.volume < 100000){
-            //   return 100000;
-            // }else{
-            //   return 100000;
-            // }
+            if(d.type == 'outros'){
+              if(d.volume < 9999999){
+                return d.volume;
+              }else{
+                return d.volume;
+              }
+            }else if(d.type == 'fii'){
+              if(d.volume < 10000){
+                return 5000;
+              }else{
+                return d.volume;
+              }
+            }else{
+              if(d.volume < 34581){
+                return 80000;
+              }else{
+                return d.volume;
+              }
+            }
           })
-          // .sum((d) => d.volume)
           .sort((a, b) => b.height - a.height || b.value - a.value);
 
         let reg = d3.selectAll("input[name='dtype']").on("change", function () {
@@ -354,8 +387,22 @@ function addFav(ativo){
   if(!favoritos_ativo.includes(ativo)){
     favoritos_ativo.push(ativo);
     localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
+    notif({
+      msg: "Adicionado aos favoritos!",
+      type: "success",
+      bgcolor: "#00B55E",
+      color: "#FFF"
+    });
   }else{
     favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
     localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
+    notif({
+      msg: "Removido dos favoritos!",
+      type: "error",
+      bgcolor: "#FF5A5A",
+      color: "#FFF"
+    });
   }
 }
