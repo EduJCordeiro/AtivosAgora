@@ -34,7 +34,7 @@ function showTreemap(tipo){
               }else{
                 var option = id.name;
               }
-              selects.push(option);
+              selects.push([option, id.asset]);
               if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
 
                 let arrayDados = [];
@@ -350,9 +350,9 @@ function showTreemap(tipo){
                 for (var z = 0; z < selects.length; z++) {
                   console.log(selects[z])
                   if(localStorage.getItem("selectOptions").includes(selects[z])){
-                    $("#select").append(`<option value="${selects[z]}" selected>${selects[z]}</option>`);
+                    $("#select").append(`<option value="${selects[z][1]}" selected>${selects[z][0]}</option>`);
                   }else{
-                    $("#select").append(`<option value="${selects[z]}">${selects[z]}</option>`);
+                    $("#select").append(`<option value="${selects[z][1]}">${selects[z][0]}</option>`);
                   }
                 }
               }
