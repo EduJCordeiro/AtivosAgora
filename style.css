@@ -180,6 +180,15 @@
   .fav:hover{
     color: #bbb;
   }
+
+  .nav-link{
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .active{
+    border-bottom: 1px solid #F7F4F8;
+  }
   
   /* responsivo */
   

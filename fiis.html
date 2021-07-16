@@ -1,83 +1,50 @@
-<html><head>
-    <meta charset="UTF-8">
-    <title>Ativos Agora | Fundos Imobiliários</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/favicon.png"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link  rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;400&family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html>
+<head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQJNTQS318"></script>
-    <script src="notifit.js"></script>
-    <link rel="stylesheet" href="notifit.css">
-    <link rel="stylesheet" href="select2.css">
-    <script type="text/javascript" src="select2.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link href="https://cdn.rawgit.com/rastikerdar/vazir-font/v19.2.0/dist/font-face.css" rel="stylesheet" type="text/css" />
-    <script src="panzoom.js"></script></head>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    <script type="text/javascript" src="bacon.js"></script>
+    <meta charset="utf-8">
+    <title>JS Bin</title>
+</head>
+<style>
+    #item {
+        width: 100px;
+        height: 100px;
+        background: red;
+        position: absolute;
+    }
 
-        gtag('config', 'G-YQJNTQS318');
-    </script>
+    #result {
+        margin-top: 20px;
+        float: right;
+    }
+
+
+</style>
 <body>
-        <nav style="display: none;" id="menunav" class="navbar navbar-expand-lg navbar-dark navbar-style">
-            <div class="container-fluid">
-            <a class="navbar-brand nav-link" aria-current="page" href="#" id="resetButton"><img src="images/logo.png" alt="Loading"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Índices e Moedas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="acoes.html">Ações</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="fiis.html">Fundos Imobiliários</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="favoritos.html">Favoritos</a>
-                    </li>
-                    </ul>
-    
-                    <select class="js-example-placeholder-multiple js-states form-control" multiple="" id="select" onchange="setSelect('fii')"></select>
-            </div>
-            </div>
-        </nav>
-        <div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
-            <div id="chart" style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
-                <div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div>
-            </div>
-        </div>
-    <script>
-        const elem = document.getElementById('chart');
-        const resetButton = document.getElementById('resetButton');
-        const panzoom = Panzoom(elem, { contain: 'outside', startScale: 1 });
-        const parent = elem.parentElement
-        // No function bind needed
-        resetButton.addEventListener('click', panzoom.reset)
-        parent.addEventListener('wheel', panzoom.zoomWithWheel);
-        showTreemap('fii');
+<div id="item"></div>
+<div id="result"></div>
+</body>
+</html>
+<script>
 
-        setInterval(() => {
-            showTreemap('fii');
-            $('.tooltip').remove();
-        }, 300000);
+    var btn = $('#item');
+    var downs = btn.asEventStream('mousedown');
+    var ups = $(document).asEventStream('mouseup').map('clicks');
+    var clickOrHold = downs.flatMapLatest(function() {
+        return Bacon.later(300, 'hold').merge(ups).take(1);
+    });
 
-        $(".js-example-placeholder-multiple").select2({
-            placeholder: "Pesquisar"
-        });
-    </script>
-    
-    </body></html>
+    var dragging = clickOrHold.filter(function(val) {return val == 'hold';} )
+        .merge(ups.map(false))
+        .toProperty(false);
+
+    // $(document).asEventStream('mousemove').filter(dragging).onValue(function(mmove) {
+    //     mmove.preventDefault();
+    //     btn.offset({left: mmove.clientX, top: mmove.clientY});
+    // });
+
+    clickOrHold.onValue($('#result'), 'append');
+
+
+</script>

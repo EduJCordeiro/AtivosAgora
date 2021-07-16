@@ -37,22 +37,22 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Índices e Moedas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="acoes.html">Ações</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="fiis.html">Fundos Imobiliários</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="favoritos.html">Favoritos</a>
-                </li>
-            </ul>
-        </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="loadPage(this.id);" id="outros">Índices e Moedas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="loadPage(this.id);" id="asset">Ações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="loadPage(this.id);" id="fii">Fundos Imobiliários</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="favoritos.html">Favoritos</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -150,7 +150,7 @@
 
     setInterval(() => {
         ativos();
-    }, 10000);
+    }, 300000);
 
     function max(id){
         document.getElementById("icon"+id).innerHTML = "<i onclick='min("+id+")' class='fas fa-minus icon'></i>";
