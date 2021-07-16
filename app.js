@@ -35,9 +35,9 @@ function showTreemap(tipo){
                   var option = id.name;
                 }
                 if(localStorage.getItem("selectOptions").includes(id.asset)){
-                  $("#select").append('<option value="'+id.asset+'" selected>'+option+'</option>');
+                  $("#select").append(`<option value="${id.asset}" class="option-${id.type}" selected>${option}</option>`);
                 }else{
-                  $("#select").append('<option value="'+id.asset+'">'+option+'</option>');
+                  $("#select").append(`<option value="${id.asset}" class="option-${id.type}">${option}</option>`);
                 }
               }
 
