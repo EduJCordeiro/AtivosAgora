@@ -14,6 +14,7 @@ function setSelect(tipo){
 function showTreemap(tipo){
   var loop = [];
   let arrayMain = [];
+  var selects = [];
   let dadosJson = '{ "name": "ASSETS", "children": [';
 
   var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(',');
@@ -28,19 +29,12 @@ function showTreemap(tipo){
 
           ids.forEach((id, index) => {
             if(id.type == tipo || (tipo == 'favoritos' && favoritos_ativo.includes(id.asset))){
-              if(localStorage.getItem("controlSelect") == 0 && tipo == sessionStorage.getItem("view")){
-                if(id.name == 0){
-                  var option = id.asset;
-                }else{
-                  var option = id.name;
-                }
-                if(localStorage.getItem("selectOptions").includes(id.asset)){
-                  $("#select").append(`<option value="${id.asset}" class="option-${id.type}" selected>${option}</option>`);
-                }else{
-                  $("#select").append(`<option value="${id.asset}" class="option-${id.type}">${option}</option>`);
-                }
+              if(id.name == 0){
+                var option = id.asset;
+              }else{
+                var option = id.name;
               }
-
+              selects.push(option);
               if(localStorage.getItem("selectOptions").includes(id.asset) || localStorage.getItem("selectOptions") == ''){
 
                 let arrayDados = [];
@@ -68,8 +62,6 @@ function showTreemap(tipo){
               }
             }
           });
-
-          localStorage.setItem("controlSelect", '1');
 
           for (var y = 0; y < loop.length; y++) {
             var contador = 0;
@@ -353,6 +345,18 @@ function showTreemap(tipo){
               chart();
               $('.loading').remove();
               $('#menunav').show();
+
+              if(localStorage.getItem("controlSelect") == 0){
+                for (var z = 0; z < selects.length; z++) {
+                  console.log(selects[z])
+                  if(localStorage.getItem("selectOptions").includes(selects[z])){
+                    $("#select").append(`<option value="${selects[z]}" selected>${selects[z]}</option>`);
+                  }else{
+                    $("#select").append(`<option value="${selects[z]}">${selects[z]}</option>`);
+                  }
+                }
+              }
+              localStorage.setItem("controlSelect", '1');
             }
           }
 
