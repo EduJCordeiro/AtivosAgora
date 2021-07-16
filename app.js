@@ -28,7 +28,7 @@ function showTreemap(tipo){
 
           ids.forEach((id, index) => {
             if(id.type == tipo || (tipo == 'favoritos' && favoritos_ativo.includes(id.asset))){
-              if(localStorage.getItem("controlSelect") == 0){
+              if(localStorage.getItem("controlSelect") == 0 && tipo == sessionStorage.getItem("view")){
                 if(id.name == 0){
                   var option = id.asset;
                 }else{
