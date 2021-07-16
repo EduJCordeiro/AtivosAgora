@@ -348,7 +348,6 @@ function showTreemap(tipo){
 
               if(localStorage.getItem("controlSelect") == 0){
                 for (var z = 0; z < selects.length; z++) {
-                  console.log(selects[z])
                   if(localStorage.getItem("selectOptions").includes(selects[z])){
                     $("#select").append(`<option value="${selects[z][1]}" selected>${selects[z][0]}</option>`);
                   }else{
