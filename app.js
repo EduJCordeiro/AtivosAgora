@@ -265,6 +265,7 @@ function showData(tipo, res){
       svg
           .attr("width", '100%')
           .attr("height", '100%')
+          .attr("style", 'margin-top: -20px')
           .classed("svg-content-responsive", true);
 
           const leaf = svg
@@ -467,20 +468,18 @@ function showData(tipo, res){
           .attr("dx", (d) => d.x0 + d.x1)
           .attr("dy", (d) => d.y0 + d.y1)
           .append("text")
-          .attr("x", (d) => d.x0 + 3)
-          .attr("y", (d) => d.y0 + 18)
+          .attr("x", (d) => d.x0 + 4)
+          .attr("y", (d) => d.y0 + 25)
           .text((d) => d.data.name)
-          // .attr("font-size", d => Math.max(d.x1 - d.x0, d.y1 - d.y0) / 35)
           .attr("font-size", function (d) {
-            if (Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22 > 16) {
-              return 16;
-            } else if (Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22 < 6) {
+            if(Math.min(d.x1 - d.x0, d.y1 - d.y0)/20 > 15){
+              return 14;
+            }else if(Math.min(d.x1 - d.x0, d.y1 - d.y0)/20 < 6){
               return 8;
-            } else {
-              return Math.max(d.x1 - d.x0, d.y1 - d.y0) / 22;
+            }else{
+              return Math.min(d.x1 - d.x0, d.y1 - d.y0)/18;
             }
           })
-          .attr("font-weight", "bold")
           .attr("fill", "#fff");
 
       return svg.node();
@@ -489,6 +488,10 @@ function showData(tipo, res){
     let filteredData = d3
         .hierarchy(data)
         .sum(function (d) {
+          function getRandomArbitrary(min, max) {
+            return Math.random() * (max - min) + min;
+          }
+
           if (d.type == 'outros') {
             if (d.volume < 9999999) {
               return d.volume;
@@ -497,13 +500,19 @@ function showData(tipo, res){
             }
           } else if (d.type == 'fii') {
             if (d.volume < 10000) {
-              return 5000;
+
+              return getRandomArbitrary(40000, 75000);
             } else {
               return d.volume;
             }
           } else {
-            if (d.volume < 34581) {
-              return 80000;
+            if (d.idsector == 7) {
+              return 4000000;
+            }
+            if (d.volume < 1000000) {
+              return 3000000;
+            } else if (d.volume > 1000000 && d.volume < 5000000) {
+              return getRandomArbitrary(3000000, 6000000);
             } else {
               return d.volume;
             }
@@ -519,8 +528,10 @@ function showData(tipo, res){
         .treemap()
         .size([width, height])
         .padding(1)
-        .paddingRight(1)
-        .paddingTop(25)
+        .paddingRight(3)
+        .paddingLeft(3)
+        .paddingBottom(0)
+        .paddingTop(30)
         .round(true);
 
     // let charsts = d3.select("#chart");
