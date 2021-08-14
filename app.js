@@ -342,8 +342,8 @@ function showData(tipo, res){
                                 <li>Setor: ${d.data.sector}</li>
                                 <li>Preço: ${d.data.price2}</li>
                                 <li>Variaçao: ${d.data.pc2}</li>
-                                <li>MAX: ${d.data.max}</li>
-                                <li>MIN: ${d.data.min}</li>
+                                <li>Max: ${d.data.max}</li>
+                                <li>Min: ${d.data.min}</li>
                                 <li class='modal-att'>Atualizado em ${d.data.update}</li>
                             </div>
                         </div>
