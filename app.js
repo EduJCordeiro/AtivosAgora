@@ -25,6 +25,7 @@ function showTreemap(tipo){
   )
       .then(function (response) {
         response.json().then(function (res) {
+          
           var ids = res.rows;
 
           ids.forEach((id, index) => {
@@ -57,6 +58,13 @@ function showTreemap(tipo){
                   volume: volume,
                   type: id.type,
                   name_asset: id.name,
+                  max: id.max,
+                  min: id.min,
+                  update: id.update,
+                  research: id.research,
+                  pvpa: id.pvpa,
+                  yield: id.yield,
+                  dividendo: id.dividendo,
                 });
                 arrayMain.push(arrayDados);
               }
@@ -89,6 +97,22 @@ function showTreemap(tipo){
                       arrayMain[x][0].type +
                       '", "name_asset": "' +
                       arrayMain[x][0].name_asset +
+                      '", "max": "' +
+                      arrayMain[x][0].max +
+                      '", "min": "' +
+                      arrayMain[x][0].min +
+                      '", "update": "' +
+                      arrayMain[x][0].update +
+                      '", "research": "' +
+                      arrayMain[x][0].research +
+                      '", "sector": "' +
+                      arrayMain[x][0].sector +
+                      '", "pvpa": "' +
+                      arrayMain[x][0].pvpa +
+                      '", "yield": "' +
+                      arrayMain[x][0].yield +
+                      '", "dividendo": "' +
+                      arrayMain[x][0].dividendo +
                       '"}';
                 } else {
                   dadosJson +=
@@ -109,6 +133,22 @@ function showTreemap(tipo){
                       arrayMain[x][0].type +
                       '", "name_asset": "' +
                       arrayMain[x][0].name_asset +
+                      '", "max": "' +
+                      arrayMain[x][0].max +
+                      '", "min": "' +
+                      arrayMain[x][0].min +
+                      '", "update": "' +
+                      arrayMain[x][0].update +
+                      '", "research": "' +
+                      arrayMain[x][0].research +
+                      '", "sector": "' +
+                      arrayMain[x][0].sector +
+                      '", "pvpa": "' +
+                      arrayMain[x][0].pvpa +
+                      '", "yield": "' +
+                      arrayMain[x][0].yield +
+                      '", "dividendo": "' +
+                      arrayMain[x][0].dividendo +
                       '"}';
                 }
                 if (arrayMain[z] != undefined) {
@@ -167,24 +207,67 @@ function showTreemap(tipo){
                   .enter()
                   .append("g")
                   .attr("transform", d => `translate(${d.x0},${d.y0})`)
+                  .text(function (d) {
+                    if(d.data.name.indexOf('/USD') !== -1){
+                      d.data.price2 = '$'+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+                    }else{
+                      d.data.price2 = 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+                    }
+                  })
+                  .text((d) => d.data.pc2 = (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
                   .on("dblclick", function (d) {
+                    if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
                     $('#modals').html(`
-              <div class="modal fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
-                  <div class="modal-backdrop fade show"></div>
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <h5 class="modal-title" id="ModalLabel">${d.data.name}</h5>
-                          </div>
-                          <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="$('#modalDetalhes').remove()"></button>
-                          <div class="modal-body">
-                              <li>Setor: ${d.data.name}</li>
-                              <li>Preço: ${d.data.price}</li>
-                              <li>Variaçao: ${d.data.pc}</li>
+                      <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
+                          <div class="modal-backdrop fade show"></div>
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                  <i onclick='aaa()' id='aaa' class="far fa-star"></i>
+                                  <i onclick='bbb()' id='bbb' style='display:none' class="far fa-star"></i>
+                                      <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.research}</h5>
+                                  </div>
+                                  <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="$('#modalDetalhes').remove()"></button>
+                                  <div class="modal-body modal-details-body">
+                                      <li>Ticker: ${d.data.name}</li>
+                                      <li>Setor: ${d.data.sector}</li>
+                                      <li>Preço: ${d.data.price2}</li>
+                                      <li>Variaçao: ${d.data.pc2}</li>
+                                      <li>Max: ${d.data.max}</li>
+                                      <li>Min: ${d.data.min}</li>
+                                      <li>V/VPA: ${d.data.pvpa}</li>
+                                      <li>Yield/mês: ${d.data.yield}</li>
+                                      <li>Dividendo: ${d.data.dividendo}</li>
+                                      <li class='modal-att'>Atualizado em ${d.data.update}</li>
+                                  </div>
+                              </div>
                           </div>
                       </div>
-                  </div>
-              </div>`);
+                    `);
+                    }else{ // Modal de ações e cripto
+                      $('#modals').html(`
+                        <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
+                            <div class="modal-backdrop fade show"></div>
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.research}</h5>
+                                    </div>
+                                    <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="$('#modalDetalhes').remove()"></button>
+                                    <div class="modal-body modal-details-body">
+                                        <li>Ticker: ${d.data.name}</li>
+                                        <li>Setor: ${d.data.sector}</li>
+                                        <li>Preço: ${d.data.price2}</li>
+                                        <li>Variaçao: ${d.data.pc2}</li>
+                                        <li>MAX: ${d.data.max}</li>
+                                        <li>MIN: ${d.data.min}</li>
+                                        <li>Atualizado em ${d.data.update}</li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      `);
+                    }
                   });
 
               leaf
@@ -429,4 +512,13 @@ function addFav(ativo){
       color: "#FFF"
     });
   }
+}
+
+function aaa(){
+  document.getElementById("aaa").style.display = "none";
+  document.getElementById("bbb").style.display = "block";
+}
+function bbb(){
+  document.getElementById("aaa").style.display = "block";
+  document.getElementById("bbb").style.display = "none";
 }
