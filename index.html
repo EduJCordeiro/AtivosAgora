@@ -82,18 +82,42 @@
 </nav>
 <div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
     <div style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
-        <div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div>
+        <div class="loading">
+            <div class="master-loading">
+                <div class="divs-loading">
+                    <div></div><div></div><div></div><div></div>
+                </div>
+            </div>
+            <span>Carregando...</span>
+        </div>
     </div>
 </div>
 <div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
     <div id="chart" style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
-        <div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div>
+        <div class="loading">
+            <div class="master-loading">
+                <div class="divs-loading">
+                    <div></div><div></div><div></div><div></div>
+                </div>
+            </div>
+            <span>Carregando...</span>
+        </div>
     </div>
 </div>
+<div id="tips" class="tips">Clique duas vezes no ativo para ver detalhes sobre ele! 😉</div>
 <div id="modals"></div>
 <script>
     function loadPage(id){
-        $('#chart').html(`<div class="loading"><img src="images/loading.gif" alt="Loading"><span>Carregando...</span></div>`);
+        $('#chart').html(`
+            <div class="loading">
+                <div class="master-loading">
+                    <div class="divs-loading">
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                </div>
+                <span>Carregando...</span>
+            </div>
+        `);
 
         localStorage.setItem("selectOptionsSelected", '');
 

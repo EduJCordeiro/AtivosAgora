@@ -531,6 +531,7 @@ function showData(tipo, res){
       chart();
       $('.loading').remove();
       $('#menunav').show();
+      $('#tips').show();
 
       if (localStorage.getItem("controlSelect") == 0) {
         for (var z = 0; z < selects.length; z++) {

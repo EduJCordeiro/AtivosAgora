@@ -1,9 +1,65 @@
 * {
     font-family: 'Vazir', sans-serif;
-  }
+}
   
-  /* Make the chart container fill the page using CSS. */
-  
+@keyframes divs-loading{
+  0% { transform: scale(1.1500000000000001) }
+  100% { transform: scale(1) }
+}
+.divs-loading div{
+  position: absolute;
+  width: 66.69px;
+  height: 66.69px;
+  top: 12.539999999999997px;
+  left: 12.539999999999997px;
+  background: #255e2f;
+  animation: divs-loading 1s cubic-bezier(0,0.5,0.5,1) infinite;
+  animation-delay: -0.3s;
+}
+.divs-loading div:nth-child(2){
+  top: 12.539999999999997px;
+  left: 91.77000000000001px;
+  background: #a71d26;
+  animation-delay: -0.2s;
+}
+.divs-loading div:nth-child(3){
+  top: 91.77000000000001px;
+  left: 12.539999999999997px;
+  background: #c43d44;
+  animation-delay: 0s;
+}
+.divs-loading div:nth-child(4){
+  top: 91.77000000000001px;
+  left: 91.77000000000001px;
+  background: #538654;
+  animation-delay: -0.1s;
+}
+.master-loading{
+  width: 171px;
+  height: 171px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+}
+.divs-loading{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.divs-loading div{
+  box-sizing: content-box;
+}
+.tips{
+  padding: 4px 10px;
+  color: #FBAD00;
+  font-size: 14px;
+  display: none;
+}  
+
+
 #chart {
   left: 0px;
   right: 0px;
