@@ -57,6 +57,9 @@
   color: #FBAD00;
   font-size: 14px;
   display: none;
+  background: #1a1d20;
+  -webkit-box-shadow: 0px 2px 11px 1px #000000!important;
+  box-shadow: 0px 2px 11px 1px #000000!important;
 }  
 
 
@@ -216,7 +219,8 @@ body{
 }
 .navbar-style{
   background-color: #1a1d20!important;
-  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 5%), inset 0 -1px 0 rgb(0 0 0 / 15%);
+  -webkit-box-shadow: 0px -2px 11px 1px #000000!important;
+  box-shadow: 0px -2px 11px 1px #000000!important;
   top: 0!important;
   left: 0!important;
   width: 100%!important;
