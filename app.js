@@ -308,7 +308,7 @@ function showData(tipo, res){
                               <li>Min: ${d.data.min}</li>
                               <li>V/VPA: ${d.data.pvpa}</li>
                               <li>Yield/mês: ${d.data.yield}</li>
-                              <li>Dividendo: ${d.data.dividendo}</li>
+                              <li>Último rendimento: ${d.data.dividendo}</li>
                               <li class='modal-att'>Atualizado em ${d.data.update}</li>
                           </div>
                       </div>
