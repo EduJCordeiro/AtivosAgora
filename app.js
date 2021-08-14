@@ -19,25 +19,18 @@ function showTreemap(tipo) {
       const timestamp_db = doc.data().date_time.seconds;
       const diff = ((timestamp_db - timestamp_now/1000)/60)*-1;
 
-      if(parseFloat(diff) > parseFloat(0.0)){
+      if(parseFloat(diff) > parseFloat(20.0)){
         fetch(
             "https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1",
             {method: "GET"}
         ).then(function (response) {
               response.json().then(function (res) {
-                const date = new Date(timestamp_now).toLocaleDateString("pt-BR")
-                const time = new Date(timestamp_now).toLocaleTimeString("pt-BR")
-
-                const dt = new Date();
-                dt.setMinutes( dt.getMinutes() + 20 );
-
-                const date_time = firebase.firestore.Timestamp.fromDate(dt);
+                const date_time = firebase.firestore.Timestamp.fromDate(new Date());
 
                 if(JSON.stringify(res).indexOf("columns") > 0){
-                  console.log('vai att');
                   db.collection('ativos-agora').doc('sheets').update({json: res, date_time: date_time})
                       .then(() => {
-                        console.log('atualizado');
+                        // console.log('atualizado');
                       })
                       .catch((err) => {
                         console.error(err);
@@ -61,6 +54,7 @@ function showTreemap(tipo) {
     console.log(err.message)
   })
 }
+
 function getColor(variation) {
   variation = parseFloat(variation);
 
