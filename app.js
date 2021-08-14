@@ -12,6 +12,9 @@ function setSelect(tipo){
 }
 
 function showTreemap(tipo) {
+
+
+
   const db = firebase.firestore();
   db.collection('ativos-agora').get().then(snapshot => {
     snapshot.docs.forEach(doc => {
@@ -82,50 +85,13 @@ if(localStorage.getItem("favoritos_ativo") === null){
   localStorage.setItem("favoritos_ativo", "0");
 }
 
-var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(',');
+var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(','); 
 
-function max(id){
-  document.getElementById("icon"+id).innerHTML = "<i onclick='min("+id+")' class='fas fa-minus icon'></i>";
-
-  document.getElementById("setorAtivos"+id).style.display = "flex";
-
-  localStorage.setItem("setorAtivos"+id , "style='display: flex'");
-  localStorage.setItem("icon"+id, "<i onclick='min("+id+")' class='fas fa-minus icon'></i>");
-}
-function min(id){
-  document.getElementById("icon"+id).innerHTML = "<i onclick='max("+id+")' class='fas fa-plus icon'></i>";
-
-  document.getElementById("setorAtivos"+id).style.display = "none";
-
-  localStorage.setItem("setorAtivos"+id , "style='display: none'");
-  localStorage.setItem("icon"+id, "<i onclick='max("+id+")' class='fas fa-plus icon'></i>");
-}
-
-function addFav(ativo){
-  if(!favoritos_ativo.includes(ativo)){
-    favoritos_ativo.push(ativo);
-    localStorage.setItem("favoritos_ativo" , favoritos_ativo);
-
-    notif({
-      msg: "Adicionado aos favoritos!",
-      type: "success",
-      bgcolor: "#00B55E",
-      color: "#FFF"
-    });
-  }else{
-    favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
-    localStorage.setItem("favoritos_ativo" , favoritos_ativo);
-
-    notif({
-      msg: "Removido dos favoritos!",
-      type: "error",
-      bgcolor: "#FF5A5A",
-      color: "#FFF"
-    });
-  }
-}
+localStorage.setItem("selectOptions", '');
+localStorage.setItem("controlSelect", '0');
 
 function showData(tipo, res){
+  
   var loop = [];
   let arrayMain = [];
   var selects = [];
@@ -323,6 +289,9 @@ function showData(tipo, res){
           })
           .text((d) => d.data.pc2 = (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
           .on("dblclick", function (d) {
+
+            
+
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
               <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
@@ -331,12 +300,12 @@ function showData(tipo, res){
                       <div class="modal-content">
                           <div class="modal-header">
                             <div class="starFav">
-                              <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick='fav()' class="far fa-star"></i></div>
-                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick='disfav()' class="fas fa-star"></i></div>
+                              <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
+                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}')" class="fas fa-star"></i></div>
                             </div>
                               <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.name}</h5>
                           </div>
-                          <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="$('#modalDetalhes').remove()"></button>
+                          <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="closeModal('${tipo}')"></button>
                           <div class="modal-body modal-details-body">
                               <li class="modal-name">${d.data.research}</li>
                               <li>Setor: ${d.data.sector}</li>
@@ -352,6 +321,14 @@ function showData(tipo, res){
                       </div>
                   </div>
               </div>
+              <script>
+                function closeModal(tipo){
+                  $('#modalDetalhes').remove();
+                  if(tipo == "favoritos"){
+                    showTreemap(tipo);
+                  }
+                }
+              </script>
             `);
             }else{ // Modal de ações e cripto
               $('#modals').html(`
@@ -361,14 +338,14 @@ function showData(tipo, res){
                         <div class="modal-content">
                             <div class="modal-header">
                               <div class="starFav">
-                                <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick='fav()' class="far fa-star"></i></div>
-                                <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick='disfav()' class="fas fa-star"></i></div>
+                                <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}', ${tipo})" class="far fa-star"></i></div>
+                                <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}', ${tipo})" class="fas fa-star"></i></div>
                               </div>
-                                <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.research}</h5>
+                                <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.name}</h5>
                             </div>
-                            <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="$('#modalDetalhes').remove()"></button>
+                            <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="closeModal('${tipo}')"></button>
                             <div class="modal-body modal-details-body">
-                                <li>Ticker: ${d.data.name}</li>
+                                <li class="modal-name">${d.data.research}</li>
                                 <li>Setor: ${d.data.sector}</li>
                                 <li>Preço: ${d.data.price2}</li>
                                 <li>Variaçao: ${d.data.pc2}</li>
@@ -379,9 +356,29 @@ function showData(tipo, res){
                         </div>
                     </div>
                 </div>
+                <script>
+                  function closeModal(tipo){
+                    $('#modalDetalhes').remove();
+                    if(tipo == "favoritos"){
+                      showTreemap(tipo);
+                    }
+                  }
+                </script>
               `);
             }
+
+            var fav_ativo = localStorage.getItem("favoritos_ativo").split(',');
+
+            if(fav_ativo.includes(d.data.name)){
+              document.getElementById('fav').style.display = "none";
+              document.getElementById('disfav').style.display = "block";
+            }else{
+              document.getElementById('fav').style.display = "block";
+              document.getElementById('disfav').style.display = "none";
+            }
+
           });
+
 
       leaf
           .append("rect")
@@ -560,12 +557,33 @@ function showData(tipo, res){
   window.addEventListener("resize", redraw);
 }
 
-function fav(){
+function fav(ativo){
+  favoritos_ativo.push(ativo);
+  localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
   document.getElementById('fav').style.display = "none";
   document.getElementById('disfav').style.display = "block";
+
+  notif({
+    msg: "Adicionado aos favoritos com sucesso!",
+    type: "success",
+    bgcolor: "#00B55E",
+    color: "#FFF"
+  });
 }
 
-function disfav(){
+function disfav(ativo){
+  favoritos_ativo = favoritos_ativo.filter(item => item !== ativo)
+  localStorage.setItem("favoritos_ativo" , favoritos_ativo);
+
   document.getElementById('fav').style.display = "block";
   document.getElementById('disfav').style.display = "none";
+
+  notif({
+    msg: "Removido dos favoritos com sucesso!",
+    type: "success",
+    bgcolor: "#00B55E",
+    color: "#FFF"
+  });
 }
+

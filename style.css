@@ -194,18 +194,35 @@ body{
   text-align: center;
   padding: 0 10px;
   word-break: break-word;
+  font-weight: bold;
 }
 .modal-details-body{
   list-style: none;
+  padding: 10px 15px 50px 15px!important;
+  color: #202428;
 }
 .modal-att{
   color: #777;
   font-size: 12px;
   position: absolute;
   bottom: 0;
-  transform: translate(50%, -50%);
+  width: calc(100% - 30px);
+  text-align: center;
+  padding: 5px;
 }
-  
+.modal-name{
+  text-align: center;
+  font-size: 18px;
+  color: #1A1D20; 
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.starFav{
+  position: absolute;
+  left: 15px;
+}
+
+
 /* responsivo */
 
 @media only screen and (min-width: 2300px) {
