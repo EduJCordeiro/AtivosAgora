@@ -18,7 +18,6 @@ function showTreemap(tipo) {
       const timestamp_now = new Date().getTime();
       const timestamp_db = doc.data().date_time.seconds;
       const diff = ((timestamp_db - timestamp_now/1000)/60)*-1;
-      console.log(diff);
 
       if(parseFloat(diff) > parseFloat(21.0)){
         fetch(
