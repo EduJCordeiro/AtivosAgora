@@ -70,7 +70,7 @@
     ativos();
 
     function ativos(){
-        fetch('https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1', { method: 'GET' })
+        fetch('https://sheetest.herokuapp.com/api', { method: 'GET' })
         .then(function(response){
             response.json().then(function(data){
 

@@ -24,7 +24,7 @@ function showTreemap(tipo) {
 
       if(parseFloat(diff) > parseFloat(20.0)){
         fetch(
-            "https://sheetest.herokuapp.com/api?id=1eXuH6zQzJvWOs5G5ZMk9cZMWI1iqL32VTvcTTuWpLpA&sheet=1",
+            "https://sheetest.herokuapp.com/api",
             {method: "GET"}
         ).then(function (response) {
               response.json().then(function (res) {
