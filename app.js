@@ -425,7 +425,7 @@ function showData(tipo, res){
       txt
           .append("tspan")
           .text(function (d) {
-            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '13') {
+            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26') {
               return '$' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
             }
             if (d.data.idsector == '14') {
