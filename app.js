@@ -427,8 +427,7 @@ function showData(tipo, res){
           .text(function (d) {
             if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26') {
               return '$' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            }
-            if (d.data.idsector == '14') {
+            }else if (d.data.idsector == '14') {
               return (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
             } else {
               return 'R$ ' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
