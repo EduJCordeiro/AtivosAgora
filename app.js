@@ -474,7 +474,7 @@ function showData(tipo, res){
       txt
           .append("tspan")
           .text(function (d) {
-            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26') {
+            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26' || d.data.idsector == '27') {
               return '$' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
             }else if (d.data.idsector == '14') {
               return (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
@@ -553,7 +553,19 @@ function showData(tipo, res){
             } else {
               return d.volume;
             }
-          } else {
+          } else if (d.type == 'crypto') {
+            if (d.volume < 638056) {
+              return getRandomArbitrary(238056, 638056);
+            } else {
+              return d.volume;
+            }
+          } else if (d.type == 'etf_br') {
+            if (d.volume < 1500000) {
+              return getRandomArbitrary(500000, 1500000);
+            } else {
+              return d.volume;
+            }
+          }  else {
             if (d.idsector == 7) {
               return 8500000;
             }
