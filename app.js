@@ -251,6 +251,7 @@ function showData(tipo, res){
   function redraw() {
     var width = chartDiv.clientWidth;
     var height = chartDiv.clientHeight;
+    var color = "";
 
     d3.select("svg").html("");
 
@@ -277,18 +278,25 @@ function showData(tipo, res){
             }else{
               d.data.price2 = 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
             }
+
           })
           .text((d) => d.data.pc2 = (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
           .on("dblclick", function (d) {
 
-            
+            if(d.data.pc > 0){
+              color = "dc_color_p";
+            }else if(d.data.pc == 0){
+              color = "dc_color_e";
+            }else{
+              color = "dc_color_m";
+            }
 
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
               <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
                   <div class="modal-backdrop fade show"></div>
                   <div class="modal-dialog" role="document">
-                      <div class="modal-content">
+                      <div class="modal-content modal-content-w">
                           <div class="modal-header">
                             <div class="starFav">
                               <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
@@ -298,15 +306,44 @@ function showData(tipo, res){
                           </div>
                           <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="closeModal('${tipo}')"></button>
                           <div class="modal-body modal-details-body">
-                              <li class="modal-name">${d.data.research}</li>
-                              <li>Setor: ${d.data.sector}</li>
-                              <li>Preço: ${d.data.price2}</li>
-                              <li>Variaçao: ${d.data.pc2}</li>
-                              <li>Max: ${d.data.max}</li>
-                              <li>Min: ${d.data.min}</li>
-                              <li>V/VPA: ${d.data.pvpa}</li>
-                              <li>Yield/mês: ${d.data.yield}</li>
-                              <li>Último rendimento: ${d.data.dividendo}</li>
+                            <div class="details-content">
+                              <h5 class="dc_name">${d.data.research}</h5>
+                              <span class="dc_sector">${d.data.sector}</span>
+                              <div class="dc_prices dc_bdr_top">
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Mínima</span>
+                                  <span class="dc_box_value">${d.data.min}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box dc_padd">
+                                  <span class="dc_box_title">Preço</span>
+                                  <span class="dc_box_value dc_value_price">${d.data.price2}</span>
+                                  <span class="dc_box_var ${color}">${d.data.pc2}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Máxima</span>
+                                  <span class="dc_box_value">${d.data.max}</span>
+                                </div>
+                              </div>
+                              <div class="dc_border_h"></div>
+                              <div class="dc_prices dc_bdr_bottom">
+                                <div class="dc_box">
+                                  <span class="dc_box_title">V/VPA</span>
+                                  <span class="dc_box_value">${d.data.pvpa}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Último rendimento</span>
+                                  <span class="dc_box_value dc_value_price">${d.data.dividendo}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Yield/mês</span>
+                                  <span class="dc_box_value">${d.data.yield}</span>
+                                </div>
+                              </div>
+                            </div>
                               <li class='modal-att'>Atualizado em ${d.data.update}</li>
                           </div>
                       </div>
@@ -326,7 +363,7 @@ function showData(tipo, res){
                 <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
                     <div class="modal-backdrop fade show"></div>
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
+                        <div class="modal-content modal-content-w">
                             <div class="modal-header">
                               <div class="starFav">
                                 <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}', ${tipo})" class="far fa-star"></i></div>
@@ -336,14 +373,29 @@ function showData(tipo, res){
                             </div>
                             <button type="button" class="btn btn-close btn-outline-secondary btn-rounded btn-icon" onclick="closeModal('${tipo}')"></button>
                             <div class="modal-body modal-details-body">
-                                <li class="modal-name">${d.data.research}</li>
-                                <li>Setor: ${d.data.sector}</li>
-                                <li>Preço: ${d.data.price2}</li>
-                                <li>Variaçao: ${d.data.pc2}</li>
-                                <li>Max: ${d.data.max}</li>
-                                <li>Min: ${d.data.min}</li>
-                                <li class='modal-att'>Atualizado em ${d.data.update}</li>
+                            <div class="details-content">
+                              <h5 class="dc_name">${d.data.research}</h5>
+                              <span class="dc_sector">${d.data.sector}</span>
+                              <div class="dc_prices dc_bdr_top">
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Mínima</span>
+                                  <span class="dc_box_value">${d.data.min}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box dc_padd">
+                                  <span class="dc_box_title">Preço</span>
+                                  <span class="dc_box_value dc_value_price">${d.data.price2}</span>
+                                  <span class="dc_box_var ${color}">${d.data.pc2}</span>
+                                </div>
+                                <div class="dc_border"></div>
+                                <div class="dc_box">
+                                  <span class="dc_box_title">Máxima</span>
+                                  <span class="dc_box_value">${d.data.max}</span>
+                                </div>
+                              </div>
                             </div>
+                              <li class='modal-att'>Atualizado em ${d.data.update}</li>
+                          </div>
                         </div>
                     </div>
                 </div>
