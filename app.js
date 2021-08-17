@@ -280,12 +280,6 @@ function showData(tipo, res){
               color = "dc_color_m";
             }
 
-            if(d.data.max == 0){
-              d.data.max = "-";
-            }
-            if(d.data.min == 0){
-              d.data.min = "-";
-            }
             if(d.data.update != 0){
               d.data.update = 'Atualizado em '+d.data.update;
             }else{
@@ -294,8 +288,8 @@ function showData(tipo, res){
 
             let titulo = (d.data.idsector == '14') ? 'Pontos' : 'Preço';
             
-            let max = (d.data.max == '0' || d.data.max == '') ? 'N/A' : d.data.max;
-            let min = (d.data.min == '0' || d.data.min == '') ? 'N/A' : d.data.min;
+            let max = (d.data.max == '0' || d.data.max == '') ? '-' : d.data.max;
+            let min = (d.data.min == '0' || d.data.min == '') ? '-' : d.data.min;
 
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
