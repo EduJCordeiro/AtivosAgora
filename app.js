@@ -291,6 +291,18 @@ function showData(tipo, res){
               color = "dc_color_m";
             }
 
+            if(d.data.max == 0){
+              d.data.max = "-";
+            }
+            if(d.data.min == 0){
+              d.data.min = "-";
+            }
+            if(d.data.update != 0){
+              d.data.update = 'Atualizado em '+d.data.update;
+            }else{
+              d.data.update = 'Atualizado recentemente';
+            }
+
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
               <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
@@ -344,7 +356,7 @@ function showData(tipo, res){
                                 </div>
                               </div>
                             </div>
-                              <li class='modal-att'>Atualizado em ${d.data.update}</li>
+                              <li class='modal-att'>${d.data.update}</li>
                           </div>
                       </div>
                   </div>
@@ -394,7 +406,7 @@ function showData(tipo, res){
                                 </div>
                               </div>
                             </div>
-                              <li class='modal-att'>Atualizado em ${d.data.update}</li>
+                              <li class='modal-att'>${d.data.update}</li>
                           </div>
                         </div>
                     </div>
