@@ -341,7 +341,7 @@ function showData(tipo, res){
                                 <li>Preço: ${d.data.price2}</li>
                                 <li>Variaçao: ${d.data.pc2}</li>
                                 <li>Max: ${d.data.max}</li>
-                                <li>Min: ${d.data.volume}</li>
+                                <li>Min: ${d.data.min}</li>
                                 <li class='modal-att'>Atualizado em ${d.data.update}</li>
                             </div>
                         </div>
@@ -504,6 +504,12 @@ function showData(tipo, res){
           } else if (d.type == 'crypto') {
             if (d.volume < 638056) {
               return getRandomArbitrary(238056, 638056);
+            } else {
+              return d.volume;
+            }
+          } else if (d.type == 'etf_br') {
+            if (d.volume < 1000) {
+              return 1000;
             } else {
               return d.volume;
             }
