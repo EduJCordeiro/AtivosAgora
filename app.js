@@ -341,7 +341,7 @@ function showData(tipo, res){
                                 <li>Preço: ${d.data.price2}</li>
                                 <li>Variaçao: ${d.data.pc2}</li>
                                 <li>Max: ${d.data.max}</li>
-                                <li>Min: ${d.data.min}</li>
+                                <li>Min: ${d.data.volume}</li>
                                 <li class='modal-att'>Atualizado em ${d.data.update}</li>
                             </div>
                         </div>
@@ -422,7 +422,7 @@ function showData(tipo, res){
       txt
           .append("tspan")
           .text(function (d) {
-            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26') {
+            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26' || d.data.idsector == '27') {
               return '$' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
             }else if (d.data.idsector == '14') {
               return (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
@@ -501,7 +501,13 @@ function showData(tipo, res){
             } else {
               return d.volume;
             }
-          } else {
+          } else if (d.type == 'crypto') {
+            if (d.volume < 638056) {
+              return getRandomArbitrary(238056, 638056);
+            } else {
+              return d.volume;
+            }
+          }  else {
             if (d.idsector == 7) {
               return 8500000;
             }
