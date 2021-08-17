@@ -508,8 +508,8 @@ function showData(tipo, res){
               return d.volume;
             }
           } else if (d.type == 'etf_br') {
-            if (d.volume < 1000) {
-              return 1000;
+            if (d.volume < 1500000) {
+              return getRandomArbitrary(500000, 1500000);
             } else {
               return d.volume;
             }
