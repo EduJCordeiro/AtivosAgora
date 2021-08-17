@@ -146,10 +146,7 @@ function showData(tipo, res){
               '", "children" :[{"name" :"' +
               arrayMain[x][0].name +
               '","price" :"' +
-              arrayMain[x][0].price
-                  .replace(/\./g, "")
-                  .replace(/\,/g, ".")
-                  .replace(/[^0-9\.]+/g, "") +
+              arrayMain[x][0].price +
               '","pc" :"' +
               arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
               '", "volume": ' +
@@ -182,10 +179,7 @@ function showData(tipo, res){
               ', {"name" :"' +
               arrayMain[x][0].name +
               '","price" :"' +
-              arrayMain[x][0].price
-                  .replace(/\./g, "")
-                  .replace(/\,/g, ".")
-                  .replace(/[^0-9\.]+/g, "") +
+              arrayMain[x][0].price +
               '","pc" :"' +
               arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
               '", "volume": ' +
@@ -273,12 +267,7 @@ function showData(tipo, res){
           .append("g")
           .attr("transform", d => `translate(${d.x0},${d.y0})`)
           .text(function (d) {
-            if(d.data.name.indexOf('/USD') !== -1){
-              d.data.price2 = '$'+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            }else{
-              d.data.price2 = 'R$ '+(d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            }
-
+            d.data.price2 = (d.data.price).replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
           })
           .text((d) => d.data.pc2 = (d.data.pc > 0 ? `+${(d.data.pc*100).toFixed(2).replace('.', ',')}%` : `${(d.data.pc*100).toFixed(2).replace('.', ',')}%`))
           .on("dblclick", function (d) {
@@ -290,6 +279,11 @@ function showData(tipo, res){
             }else{
               color = "dc_color_m";
             }
+
+            let titulo = (d.data.idsector == '14') ? 'Pontos' : 'Preço';
+            
+            let max = (d.data.max == '0' || d.data.max == '') ? 'N/A' : d.data.max;
+            let min = (d.data.min == '0' || d.data.min == '') ? 'N/A' : d.data.min;
 
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
@@ -312,18 +306,18 @@ function showData(tipo, res){
                               <div class="dc_prices dc_bdr_top">
                                 <div class="dc_box">
                                   <span class="dc_box_title">Mínima</span>
-                                  <span class="dc_box_value">${d.data.min}</span>
+                                  <span class="dc_box_value">${min}</span>
                                 </div>
                                 <div class="dc_border"></div>
                                 <div class="dc_box dc_padd">
-                                  <span class="dc_box_title">Preço</span>
+                                  <span class="dc_box_title">${titulo}</span>
                                   <span class="dc_box_value dc_value_price">${d.data.price2}</span>
                                   <span class="dc_box_var ${color}">${d.data.pc2}</span>
                                 </div>
                                 <div class="dc_border"></div>
                                 <div class="dc_box">
                                   <span class="dc_box_title">Máxima</span>
-                                  <span class="dc_box_value">${d.data.max}</span>
+                                  <span class="dc_box_value">${max}</span>
                                 </div>
                               </div>
                               <div class="dc_border_h"></div>
@@ -379,18 +373,18 @@ function showData(tipo, res){
                               <div class="dc_prices dc_bdr_top">
                                 <div class="dc_box">
                                   <span class="dc_box_title">Mínima</span>
-                                  <span class="dc_box_value">${d.data.min}</span>
+                                  <span class="dc_box_value">${min}</span>
                                 </div>
                                 <div class="dc_border"></div>
                                 <div class="dc_box dc_padd">
-                                  <span class="dc_box_title">Preço</span>
+                                  <span class="dc_box_title">${titulo}</span>
                                   <span class="dc_box_value dc_value_price">${d.data.price2}</span>
                                   <span class="dc_box_var ${color}">${d.data.pc2}</span>
                                 </div>
                                 <div class="dc_border"></div>
                                 <div class="dc_box">
                                   <span class="dc_box_title">Máxima</span>
-                                  <span class="dc_box_value">${d.data.max}</span>
+                                  <span class="dc_box_value">${max}</span>
                                 </div>
                               </div>
                             </div>
@@ -474,13 +468,7 @@ function showData(tipo, res){
       txt
           .append("tspan")
           .text(function (d) {
-            if (d.data.name.indexOf('/USD') !== -1 || d.data.idsector == '26' || d.data.idsector == '27') {
-              return '$' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            }else if (d.data.idsector == '14') {
-              return (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            } else {
-              return 'R$ ' + (d.data.price).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
-            }
+            return d.data.price.replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
           })
           .attr("class", "price")
           .attr("dy", "1.8em")
