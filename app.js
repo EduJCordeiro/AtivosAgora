@@ -22,7 +22,7 @@ function showTreemap(tipo) {
       const timestamp_db = doc.data().date_time.seconds;
       const diff = ((timestamp_db - timestamp_now/1000)/60)*-1;
 
-      if(parseFloat(diff) > parseFloat(20.0)){
+      if(parseFloat(diff) > parseFloat(5.5)){
         fetch(
             "https://sheetest.herokuapp.com/api",
             {method: "GET"}
