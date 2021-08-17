@@ -12,9 +12,6 @@ function setSelect(tipo){
 }
 
 function showTreemap(tipo) {
-
-
-
   const db = firebase.firestore();
   db.collection('ativos-agora').get().then(snapshot => {
     snapshot.docs.forEach(doc => {
