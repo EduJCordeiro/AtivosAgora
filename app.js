@@ -25,7 +25,7 @@ function showTreemap(tipo) {
       if(parseFloat(diff) > parseFloat(5.5)){
         fetch(
             "https://sheetest.herokuapp.com/api",
-            {method: "GET"}
+            { method: "GET" }
         ).then(function (response) {
               response.json().then(function (res) {
                 const date_time = firebase.firestore.Timestamp.fromDate(new Date());
@@ -506,12 +506,12 @@ function showData(tipo, res){
             }
           } else {
             if (d.idsector == 7) {
-              return 4000000;
+              return 8500000;
             }
             if (d.volume < 1000000) {
-              return 3000000;
-            } else if (d.volume > 1000000 && d.volume < 5000000) {
               return getRandomArbitrary(3000000, 6000000);
+            } else if (d.volume > 1000000 && d.volume < 5000000) {
+              return getRandomArbitrary(6000000, 1000000);
             } else {
               return d.volume;
             }
