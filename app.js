@@ -287,8 +287,8 @@ function showData(tipo, res){
 
             let titulo = (d.data.idsector == '14') ? 'Pontos' : 'Preço';
             
-            let max = (d.data.max == '0' || d.data.max == '' || d.data.max.replace(' ', '') == '') ? '-' : d.data.max;
-            let min = (d.data.min == '0' || d.data.min == '' || d.data.max.replace(' ', '') == '') ? '-' : d.data.min;
+            let max = (d.data.max.length <= '2') ? '-' : d.data.max;
+            let min = (d.data.min.length <= '2') ? '-' : d.data.min;
  
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
