@@ -364,6 +364,7 @@ function showData(tipo, res){
                     <div class="modal-backdrop fade show"></div>
                     <div class="modal-dialog" role="document">
                         <div class="modal-content modal-content-w">
+                            <input type="hidden" value="${tipo}" id="tipo">
                             <div class="modal-header">
                               <div class="starFav">
                                 <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}', ${tipo})" class="far fa-star"></i></div>
