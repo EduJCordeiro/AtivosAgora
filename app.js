@@ -287,8 +287,8 @@ function showData(tipo, res){
 
             let titulo = (d.data.idsector == '14') ? 'Pontos' : 'Preço';
             
-            let max = (d.data.max == '0' || d.data.max == '') ? '-' : d.data.max;
-            let min = (d.data.min == '0' || d.data.min == '') ? '-' : d.data.min;
+            let max = (d.data.max == '0' || d.data.max == '' || d.data.max.replace(' ', '') != '') ? '-' : d.data.max;
+            let min = (d.data.min == '0' || d.data.min == '' || d.data.max.replace(' ', '') != '') ? '-' : d.data.min;
 
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
@@ -296,6 +296,7 @@ function showData(tipo, res){
                   <div class="modal-backdrop fade show"></div>
                   <div class="modal-dialog" role="document">
                       <div class="modal-content modal-content-w">
+                          <input type="hidden" value="${tipo}" id="tipo">
                           <div class="modal-header">
                             <div class="starFav">
                               <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
@@ -328,7 +329,7 @@ function showData(tipo, res){
                               <div class="dc_border_h"></div>
                               <div class="dc_prices dc_bdr_bottom">
                                 <div class="dc_box">
-                                  <span class="dc_box_title">V/VPA</span>
+                                  <span class="dc_box_title">P/VPA</span>
                                   <span class="dc_box_value">${d.data.pvpa}</span>
                                 </div>
                                 <div class="dc_border"></div>
@@ -650,4 +651,12 @@ function disfav(ativo){
     color: "#FFF"
   });
 }
+
+window.addEventListener("keydown", function (e) {
+    if (e.keyCode === 27) {
+      if($('#tipo').length > 0){
+        closeModal($('#tipo').val())
+      }
+    }
+});
 
