@@ -289,7 +289,7 @@ function showData(tipo, res){
             
             let max = (d.data.max == '0' || d.data.max == '' || d.data.max.replace(' ', '') == '') ? '-' : d.data.max;
             let min = (d.data.min == '0' || d.data.min == '' || d.data.max.replace(' ', '') == '') ? '-' : d.data.min;
-
+ 
             if(d.data.type == 'fii'){ // Modal de fundos imobiliarios
             $('#modals').html(`
               <div class="modal modal-details fade show" id="modalDetalhes" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="display: block; padding-right: 15px;" aria-modal="true">
