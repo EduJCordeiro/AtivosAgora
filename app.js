@@ -19,22 +19,22 @@ function showTreemap(tipo) {
       const timestamp_db = doc.data().date_time.seconds;
       const diff = ((timestamp_db - timestamp_now/1000)/60)*-1;
 
-      if(parseFloat(diff) > parseFloat(5.5)){
+      if(parseFloat(diff) > parseFloat(5)){
         fetch(
-            "https://sheetest.herokuapp.com/api",
+            "https://sheetest.herokuapp.com/data",
             { method: "GET" }
         ).then(function (response) {
               response.json().then(function (res) {
                 const date_time = firebase.firestore.Timestamp.fromDate(new Date());
 
-                if(JSON.stringify(res).indexOf("columns") > 0){
+                if(JSON.stringify(res).indexOf("data") > 0){
                   db.collection('ativos-agora').doc('sheets').update({json: res, date_time: date_time})
-                      .then(() => {
-                        // console.log('atualizado');
-                      })
-                      .catch((err) => {
-                        console.error(err);
-                      });
+                    .then(() => {
+                      console.log('Atualizado');
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                    });
 
                   showData(tipo, res);
                 }else{
@@ -81,7 +81,6 @@ localStorage.setItem("selectOptions", '');
 localStorage.setItem("controlSelect", '0');
 
 function showData(tipo, res){
-  
   var loop = [];
   let arrayMain = [];
   var selects = [];
@@ -89,7 +88,7 @@ function showData(tipo, res){
 
   var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(',');
 
-  var ids = res.rows;
+  var ids = res.data;
 
   ids.forEach((id, index) => {
     if (id.type == tipo || (tipo == 'favoritos' && favoritos_ativo.includes(id.asset))) {
@@ -149,9 +148,9 @@ function showData(tipo, res){
               arrayMain[x][0].price +
               '","pc" :"' +
               arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
-              '", "volume": ' +
+              '", "volume": "' +
               arrayMain[x][0].volume +
-              ', "idsector": ' +
+              '", "idsector": ' +
               arrayMain[x][0].idsector +
               ', "type": "' +
               arrayMain[x][0].type +
@@ -182,9 +181,9 @@ function showData(tipo, res){
               arrayMain[x][0].price +
               '","pc" :"' +
               arrayMain[x][0].pc.replace(/\./g, "").replace(/\,/g, ".") +
-              '", "volume": ' +
+              '", "volume": "' +
               arrayMain[x][0].volume +
-              ', "idsector": ' +
+              '", "idsector": ' +
               arrayMain[x][0].idsector +
               ', "type": "' +
               arrayMain[x][0].type +
@@ -450,7 +449,7 @@ function showData(tipo, res){
       txt
           .append("tspan")
           .html(function (d) {
-            if (d.data.name_asset != '0') {
+            if (d.data.name_asset != '0' && d.data.name_asset.replace(/[^a-zA-Zs]/g, "") != '') {
               return d.data.name_asset;
             } else {
               return d.data.name;
@@ -548,6 +547,12 @@ function showData(tipo, res){
               return d.volume;
             }
           } else if (d.type == 'crypto') {
+            if (d.name == 'USDT') {
+              return 280000000;
+            }
+            if (d.name == 'BUSD') {
+              return 280000000;
+            }
             if (d.volume < 638056) {
               return getRandomArbitrary(238056, 638056);
             } else {
