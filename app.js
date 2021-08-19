@@ -543,8 +543,7 @@ function showData(tipo, res){
             }
           } else if (d.type == 'fii') {
             if (d.volume < 10000) {
-
-              return getRandomArbitrary(40000, 75000);
+              return getRandomArbitrary(15000, 35000);
             } else {
               return d.volume;
             }
