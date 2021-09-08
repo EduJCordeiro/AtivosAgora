@@ -1,3 +1,30 @@
+function number_format (number, decimals, dec_point, thousands_sep) {
+  if(number < 0.01){
+    decimals = 8;
+  }
+  // Strip all characters but numerical ones.
+  number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+  var n = !isFinite(+number) ? 0 : +number,
+      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+      dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+      s = '',
+      toFixedFix = function (n, prec) {
+          var k = Math.pow(10, prec);
+          return '' + Math.round(n * k) / k;
+      };
+  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+  if (s[0].length > 3) {
+      s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+  }
+  if ((s[1] || '').length < prec) {
+      s[1] = s[1] || '';
+      s[1] += new Array(prec - s[1].length + 1).join('0');
+  }
+  return s.join(dec);
+}
+
 localStorage.setItem("selectOptions", "");
 localStorage.setItem("controlSelect", "0");
 
@@ -10,62 +37,24 @@ function setSelect(tipo) {
   showTreemap(tipo);
 }
 
-// function showTreemap(tipo) {
-//   const db = firebase.firestore();
-//   db.collection('ativos-agora').get().then(snapshot => {
-//     snapshot.docs.forEach(doc => {
-//       const timestamp_now = new Date().getTime();
-//       const timestamp_db = doc.data().date_time.seconds;
-//       const diff = ((timestamp_db - timestamp_now/1000)/60)*-1;
-
-//       if(parseFloat(diff) > parseFloat(5)){
-//         fetch(
-//             "https://sheetest.herokuapp.com/data",
-//             { method: "GET" }
-//         ).then(function (response) {
-//               response.json().then(function (res) {
-//                 const date_time = firebase.firestore.Timestamp.fromDate(new Date());
-
-//                 if(JSON.stringify(res).indexOf("data") > 0){
-//                   db.collection('ativos-agora').doc('sheets').update({json: res, date_time: date_time})
-//                     .then(() => {
-//                       console.log('Atualizado');
-//                     })
-//                     .catch((err) => {
-//                       console.error(err);
-//                     });
-
-//                   showData(tipo, res);
-//                 }else{
-//                   showData(tipo, doc.data().json);
-//                 }
-//               });
-//             })
-//             .catch(function (err) {
-//               showData(tipo, doc.data().json);
-//               console.error(err);
-//             });
-//       }else{
-//         showData(tipo, doc.data().json);
-//       }
-//     })
-//   }).catch(err => {
-//     console.log(err.message)
-//   })
-// }
-
 function showTreemap(tipo) {
-  fetch("https://api.ativosagora.com.br/api/v1/finance", {
+  let url;
+  if(tipo == 'crypto'){
+    url = 'https://api.ativosagora.com.br/api/v1/crypto';
+  }else{
+    url = 'https://api.ativosagora.com.br/api/v1/finance';
+  }
+  fetch(url, {
     method: "GET",
   })
-    .then(function (response) {
-      response.json().then(function (res) {
-        showData(tipo, res);
-      });
-    })
-    .catch(function (err) {
-      console.error(err);
+  .then(function (response) {
+    response.json().then(function (res) {
+      showData(tipo, res);
     });
+  })
+  .catch(function (err) {
+    console.error(err);
+  });
 }
 
 function getColor(variation) {
@@ -103,144 +92,277 @@ function showData(tipo, res) {
 
   var ids = res.data;
 
-  ids.forEach((id, index) => {
-    if (
-      id.type == tipo ||
-      (tipo == "favoritos" && favoritos_ativo.includes(id.asset))
-    ) {
-      if (id.name == 0) {
-        var option = id.asset;
-      } else {
-        var option = id.name;
-      }
-      selects.push([option, id.asset]);
+  if(tipo != 'crypto'){
+    ids.forEach((id, index) => {
+      let arrayDados = [];
+      
       if (
-        localStorage.getItem("selectOptions").includes(id.asset) ||
-        localStorage.getItem("selectOptions") == ""
+        id.type == tipo ||
+        (tipo == "favoritos" && favoritos_ativo.includes(id.asset))
       ) {
-        let arrayDados = [];
-        if (!loop.includes(id.sector)) {
-          loop.push(id.sector);
-        }
-
-        let volume = id.volume;
-
-        if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
-          volume = 99999999;
-        }
-
-        arrayDados.push({
-          idsector: id.idsector,
-          sector: id.sector,
-          name: id.asset,
-          price: id.price,
-          pc: id.variation,
-          volume: volume,
-          type: id.type,
-          name_asset: id.name,
-          max: id.max,
-          min: id.min,
-          update: id.update,
-          research: id.research,
-          pvpa: id.pvpa,
-          yield: id.yield,
-          dividendo: id.dividendo,
-        });
-        arrayMain.push(arrayDados);
-      }
-    }
-  });
-
-  for (var y = 0; y < loop.length; y++) {
-    var contador = 0;
-    for (var x = 0; x < arrayMain.length; x++) {
-      var z = parseInt(x) + parseInt(1);
-      if (loop[y] == arrayMain[x][0].sector) {
-        if (contador == 0) {
-          dadosJson +=
-            '{"name": "' +
-            loop[y] +
-            '", "children" :[{"name" :"' +
-            arrayMain[x][0].name +
-            '","price" :"' +
-            arrayMain[x][0].price +
-            '","pc" :"' +
-            arrayMain[x][0].pc
-              .replace(/\./g, "")
-              .replace(/\,/g, ".") +
-            '", "volume": "' +
-            arrayMain[x][0].volume +
-            '", "idsector": ' +
-            arrayMain[x][0].idsector +
-            ', "type": "' +
-            arrayMain[x][0].type +
-            '", "name_asset": "' +
-            arrayMain[x][0].name_asset +
-            '", "max": "' +
-            arrayMain[x][0].max +
-            '", "min": "' +
-            arrayMain[x][0].min +
-            '", "update": "' +
-            arrayMain[x][0].update +
-            '", "research": "' +
-            arrayMain[x][0].research +
-            '", "sector": "' +
-            arrayMain[x][0].sector +
-            '", "pvpa": "' +
-            arrayMain[x][0].pvpa +
-            '", "yield": "' +
-            arrayMain[x][0].yield +
-            '", "dividendo": "' +
-            arrayMain[x][0].dividendo +
-            '"}';
+        if (id.name == 0) {
+          var option = id.asset;
         } else {
-          dadosJson +=
-            ', {"name" :"' +
-            arrayMain[x][0].name +
-            '","price" :"' +
-            arrayMain[x][0].price +
-            '","pc" :"' +
-            arrayMain[x][0].pc
-              .replace(/\./g, "")
-              .replace(/\,/g, ".") +
-            '", "volume": "' +
-            arrayMain[x][0].volume +
-            '", "idsector": ' +
-            arrayMain[x][0].idsector +
-            ', "type": "' +
-            arrayMain[x][0].type +
-            '", "name_asset": "' +
-            arrayMain[x][0].name_asset +
-            '", "max": "' +
-            arrayMain[x][0].max +
-            '", "min": "' +
-            arrayMain[x][0].min +
-            '", "update": "' +
-            arrayMain[x][0].update +
-            '", "research": "' +
-            arrayMain[x][0].research +
-            '", "sector": "' +
-            arrayMain[x][0].sector +
-            '", "pvpa": "' +
-            arrayMain[x][0].pvpa +
-            '", "yield": "' +
-            arrayMain[x][0].yield +
-            '", "dividendo": "' +
-            arrayMain[x][0].dividendo +
-            '"}';
+          var option = id.name;
         }
-        if (arrayMain[z] != undefined) {
-          if (loop[y] != arrayMain[z][0].sector) {
-            dadosJson += "]}, ";
+        selects.push([option, id.asset]);
+        if (
+          localStorage.getItem("selectOptions").includes(id.asset) ||
+          localStorage.getItem("selectOptions") == ""
+        ) {
+          if (!loop.includes(id.sector)) {
+            loop.push(id.sector);
           }
-        } else {
-          dadosJson += "]}";
+
+          let volume = id.volume;
+
+          if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
+            volume = 99999999;
+          }
+
+          arrayDados.push({
+            idsector: id.idsector,
+            sector: id.sector,
+            name: id.asset,
+            price: id.price,
+            pc: id.variation,
+            volume: volume,
+            type: id.type,
+            name_asset: id.name,
+            max: id.max,
+            min: id.min,
+            update: id.update,
+            research: id.research,
+            pvpa: id.pvpa,
+            yield: id.yield,
+            dividendo: id.dividendo,
+          });
+          arrayMain.push(arrayDados);
         }
-        contador++;
+      }
+    });
+
+    for (var y = 0; y < loop.length; y++) {
+      var contador = 0;
+      for (var x = 0; x < arrayMain.length; x++) {
+        var z = parseInt(x) + parseInt(1);
+        if (loop[y] == arrayMain[x][0].sector) {
+          if (contador == 0) {
+            dadosJson +=
+              '{"name": "' +
+              loop[y] +
+              '", "children" :[{"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc
+                .replace(/\./g, "")
+                .replace(/\,/g, ".") +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
+          } else {
+            dadosJson +=
+              ', {"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc
+                .replace(/\./g, "")
+                .replace(/\,/g, ".") +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
+          }
+          if (arrayMain[z] != undefined) {
+            if (loop[y] != arrayMain[z][0].sector) {
+              dadosJson += "]}, ";
+            }
+          } else {
+            dadosJson += "]}";
+          }
+          contador++;
+        }
       }
     }
+    dadosJson += "]}";
+  }else{
+    ids.forEach((id, index) => {
+      if(id.symbol.includes('USDT', 1)){
+        if (
+          'crypto' == tipo ||
+          (tipo == "favoritos" && favoritos_ativo.includes(id.symbol))
+        ) {
+          selects.push([id.symbol.replace('USDT', ''), id.symbol]);
+
+          if (
+            localStorage.getItem("selectOptions").includes(id.symbol) ||
+            localStorage.getItem("selectOptions") == ""
+          ) {
+            if (!loop.includes('Criptomoedas')) {
+              loop.push('Criptomoedas');
+            }
+
+            let arrayDados = [];
+            if(id.lastPrice > 0){
+              arrayDados.push({
+                idsector: 27,
+                sector: 'Criptomoedas',
+                name: id.symbol.replace('USDT', ''),
+                price: '$'+number_format(id.lastPrice, 2, ',', '.'),
+                pc: (id.priceChangePercent/100),
+                volume: id.quoteVolume,
+                type: 'crypto',
+                name_asset: '',
+                max: '$'+number_format(id.highPrice, 2, ',', '.'),
+                min: '$'+number_format(id.lowPrice, 2, ',', '.'),
+                update: '',
+                research: id.symbol,
+                pvpa: '',
+                yield: '',
+                dividendo: '',
+              });
+              arrayMain.push(arrayDados);
+            }
+          }
+        }
+      }
+    });
+
+    for (var y = 0; y < loop.length; y++) {
+      var contador = 0;
+      for (var x = 0; x < arrayMain.length; x++) {
+        var z = parseInt(x) + parseInt(1);
+        if (loop[y] == arrayMain[x][0].sector) {
+          if (contador == 0) {
+            dadosJson +=
+              '{"name": "' +
+              loop[y] +
+              '", "children" :[{"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
+          } else {
+            dadosJson +=  
+              ', {"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
+          }
+          if (arrayMain[z] != undefined) {
+            if (loop[y] != arrayMain[z][0].sector) {
+              dadosJson += "]}, ";
+            }
+          } else {
+            dadosJson += "]}";
+          }
+          contador++;
+        }
+      }
+    }
+
+    dadosJson += "]}";
   }
-  dadosJson += "]}";
 
   let data = JSON.parse(dadosJson);
 
@@ -309,11 +431,10 @@ function showData(tipo, res) {
           } else {
             color = "dc_color_m";
           }
-
           if (d.data.update != 0) {
-            d.data.update = "Atualizado em " + d.data.update;
+            var text = "Atualizado em " + d.data.update;
           } else {
-            d.data.update = "Atualizado recentemente";
+            var text = "Atualizado recentemente";
           }
 
           let titulo = d.data.idsector == "14" ? "Pontos" : "Preço";
@@ -376,7 +497,7 @@ function showData(tipo, res) {
                               </div>
                             </div>
                           </div>
-                            <li class='modal-att'>${d.data.update}</li>
+                            <li class='modal-att'>${text}</li>
                         </div>
                     </div>
                 </div>
@@ -428,7 +549,7 @@ function showData(tipo, res) {
                               </div>
                             </div>
                           </div>
-                            <li class='modal-att'>${d.data.update}</li>
+                            <li class='modal-att'>${text}</li>
                         </div>
                       </div>
                   </div>
@@ -588,15 +709,11 @@ function showData(tipo, res) {
             return d.volume;
           }
         } else if (d.type == "crypto") {
-          if (d.name == "USDT") {
-            return 280000000;
-          }
-          if (d.name == "BUSD") {
-            return 280000000;
-          }
-          if (d.volume < 638056) {
-            return getRandomArbitrary(238056, 638056);
-          } else {
+          if (d.volume < 5239200) {
+            return 2239200;
+          }else if (d.research == 'BTCUSDT') {
+            return d.volume*2;
+          }else{
             return d.volume;
           }
         } else if (d.type == "etf_br") {
