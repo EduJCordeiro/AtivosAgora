@@ -44,12 +44,23 @@ function showTreemap(tipo) {
   }else{
     url = 'https://api.ativosagora.com.br/api/v1/finance';
   }
-  fetch(url, {
+  fetch('https://api.ativosagora.com.br/api/v1/finance', {
     method: "GET",
   })
   .then(function (response) {
     response.json().then(function (res) {
-      showData(tipo, res);
+
+      fetch('https://api.ativosagora.com.br/api/v1/crypto', {
+        method: "GET",
+      })
+      .then(function (response1) {
+        response1.json().then(function (res_crypto) {
+          showData(tipo, res, res_crypto);
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
     });
   })
   .catch(function (err) {
@@ -82,7 +93,7 @@ var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(",");
 localStorage.setItem("selectOptions", "");
 localStorage.setItem("controlSelect", "0");
 
-function showData(tipo, res) {
+function showData(tipo, res, res_crypto) {
   var loop = [];
   let arrayMain = [];
   var selects = [];
@@ -91,195 +102,100 @@ function showData(tipo, res) {
   var favoritos_ativo = localStorage.getItem("favoritos_ativo").split(",");
 
   var ids = res.data;
+  var ids_crypto = res_crypto.data;
 
-  if(tipo != 'crypto'){
-    ids.forEach((id, index) => {
-      let arrayDados = [];
-      
+  ids.forEach((id, index) => {
+    let arrayDados = [];
+    
+    if (id.type == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.asset))) {
+      if (id.name == 0) {
+        var option = id.asset;
+      } else {
+        var option = id.name;
+      }
+      selects.push([option, id.asset]);
       if (
-        id.type == tipo ||
-        (tipo == "favoritos" && favoritos_ativo.includes(id.asset))
+        localStorage.getItem("selectOptions").includes(id.asset) ||
+        localStorage.getItem("selectOptions") == ""
       ) {
-        if (id.name == 0) {
-          var option = id.asset;
-        } else {
-          var option = id.name;
+        if (!loop.includes(id.sector)) {
+          loop.push(id.sector);
         }
-        selects.push([option, id.asset]);
+
+        let volume = id.volume;
+
+        if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
+          volume = 99999999;
+        }
+
+        arrayDados.push({
+          idsector: id.idsector,
+          sector: id.sector,
+          name: id.asset,
+          price: id.price,
+          pc: id.variation,
+          volume: volume,
+          type: id.type,
+          name_asset: id.name,
+          max: id.max,
+          min: id.min,
+          update: id.update,
+          research: id.research,
+          pvpa: id.pvpa,
+          yield: id.yield,
+          dividendo: id.dividendo,
+        });
+        arrayMain.push(arrayDados);
+      }
+    }
+  });
+
+  ids_crypto.forEach((id, index) => {
+    if(id.symbol.includes('USDT', 1)){
+      if ('crypto' == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.symbol.replace('USDT', '/USD')))) {
+        selects.push([id.symbol.replace('USDT', ''), id.symbol]);
+
         if (
-          localStorage.getItem("selectOptions").includes(id.asset) ||
+          localStorage.getItem("selectOptions").includes(id.symbol.replace('USDT', '/USD')) ||
           localStorage.getItem("selectOptions") == ""
         ) {
-          if (!loop.includes(id.sector)) {
-            loop.push(id.sector);
+          if (!loop.includes('Criptomoedas')) {
+            loop.push('Criptomoedas');
           }
 
-          let volume = id.volume;
-
-          if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
-            volume = 99999999;
+          
+          let arrayDados = [];
+          if(id.lastPrice > 0){
+            arrayDados.push({
+              idsector: 27,
+              sector: 'Criptomoedas',
+              name: id.symbol.replace('USDT', '/USD'),
+              price: '$'+number_format(id.lastPrice, 2, ',', '.'),
+              pc: (id.priceChangePercent/100),
+              volume: id.quoteVolume,
+              type: 'crypto',
+              name_asset: id.symbol.replace('USDT', ''),
+              max: '$'+number_format(id.highPrice, 2, ',', '.'),
+              min: '$'+number_format(id.lowPrice, 2, ',', '.'),
+              update: '',
+              research: id.symbol,
+              pvpa: '',
+              yield: '',
+              dividendo: '',
+            });
+            arrayMain.push(arrayDados);
           }
-
-          arrayDados.push({
-            idsector: id.idsector,
-            sector: id.sector,
-            name: id.asset,
-            price: id.price,
-            pc: id.variation,
-            volume: volume,
-            type: id.type,
-            name_asset: id.name,
-            max: id.max,
-            min: id.min,
-            update: id.update,
-            research: id.research,
-            pvpa: id.pvpa,
-            yield: id.yield,
-            dividendo: id.dividendo,
-          });
-          arrayMain.push(arrayDados);
-        }
-      }
-    });
-
-    for (var y = 0; y < loop.length; y++) {
-      var contador = 0;
-      for (var x = 0; x < arrayMain.length; x++) {
-        var z = parseInt(x) + parseInt(1);
-        if (loop[y] == arrayMain[x][0].sector) {
-          if (contador == 0) {
-            dadosJson +=
-              '{"name": "' +
-              loop[y] +
-              '", "children" :[{"name" :"' +
-              arrayMain[x][0].name +
-              '","price" :"' +
-              arrayMain[x][0].price +
-              '","pc" :"' +
-              arrayMain[x][0].pc
-                .replace(/\./g, "")
-                .replace(/\,/g, ".") +
-              '", "volume": "' +
-              arrayMain[x][0].volume +
-              '", "idsector": ' +
-              arrayMain[x][0].idsector +
-              ', "type": "' +
-              arrayMain[x][0].type +
-              '", "name_asset": "' +
-              arrayMain[x][0].name_asset +
-              '", "max": "' +
-              arrayMain[x][0].max +
-              '", "min": "' +
-              arrayMain[x][0].min +
-              '", "update": "' +
-              arrayMain[x][0].update +
-              '", "research": "' +
-              arrayMain[x][0].research +
-              '", "sector": "' +
-              arrayMain[x][0].sector +
-              '", "pvpa": "' +
-              arrayMain[x][0].pvpa +
-              '", "yield": "' +
-              arrayMain[x][0].yield +
-              '", "dividendo": "' +
-              arrayMain[x][0].dividendo +
-              '"}';
-          } else {
-            dadosJson +=
-              ', {"name" :"' +
-              arrayMain[x][0].name +
-              '","price" :"' +
-              arrayMain[x][0].price +
-              '","pc" :"' +
-              arrayMain[x][0].pc
-                .replace(/\./g, "")
-                .replace(/\,/g, ".") +
-              '", "volume": "' +
-              arrayMain[x][0].volume +
-              '", "idsector": ' +
-              arrayMain[x][0].idsector +
-              ', "type": "' +
-              arrayMain[x][0].type +
-              '", "name_asset": "' +
-              arrayMain[x][0].name_asset +
-              '", "max": "' +
-              arrayMain[x][0].max +
-              '", "min": "' +
-              arrayMain[x][0].min +
-              '", "update": "' +
-              arrayMain[x][0].update +
-              '", "research": "' +
-              arrayMain[x][0].research +
-              '", "sector": "' +
-              arrayMain[x][0].sector +
-              '", "pvpa": "' +
-              arrayMain[x][0].pvpa +
-              '", "yield": "' +
-              arrayMain[x][0].yield +
-              '", "dividendo": "' +
-              arrayMain[x][0].dividendo +
-              '"}';
-          }
-          if (arrayMain[z] != undefined) {
-            if (loop[y] != arrayMain[z][0].sector) {
-              dadosJson += "]}, ";
-            }
-          } else {
-            dadosJson += "]}";
-          }
-          contador++;
         }
       }
     }
-    dadosJson += "]}";
-  }else{
-    ids.forEach((id, index) => {
-      if(id.symbol.includes('USDT', 1)){
-        if (
-          'crypto' == tipo ||
-          (tipo == "favoritos" && favoritos_ativo.includes(id.symbol))
-        ) {
-          selects.push([id.symbol.replace('USDT', ''), id.symbol]);
-
-          if (
-            localStorage.getItem("selectOptions").includes(id.symbol) ||
-            localStorage.getItem("selectOptions") == ""
-          ) {
-            if (!loop.includes('Criptomoedas')) {
-              loop.push('Criptomoedas');
-            }
-
-            let arrayDados = [];
-            if(id.lastPrice > 0){
-              arrayDados.push({
-                idsector: 27,
-                sector: 'Criptomoedas',
-                name: id.symbol.replace('USDT', ''),
-                price: '$'+number_format(id.lastPrice, 2, ',', '.'),
-                pc: (id.priceChangePercent/100),
-                volume: id.quoteVolume,
-                type: 'crypto',
-                name_asset: '',
-                max: '$'+number_format(id.highPrice, 2, ',', '.'),
-                min: '$'+number_format(id.lowPrice, 2, ',', '.'),
-                update: '',
-                research: id.symbol,
-                pvpa: '',
-                yield: '',
-                dividendo: '',
-              });
-              arrayMain.push(arrayDados);
-            }
-          }
-        }
-      }
-    });
-
-    for (var y = 0; y < loop.length; y++) {
-      var contador = 0;
-      for (var x = 0; x < arrayMain.length; x++) {
-        var z = parseInt(x) + parseInt(1);
-        if (loop[y] == arrayMain[x][0].sector) {
+  });
+  
+  for (var y = 0; y < loop.length; y++) {
+    var contador = 0;
+    for (var x = 0; x < arrayMain.length; x++) {
+      var z = parseInt(x) + parseInt(1);
+      if (loop[y] == arrayMain[x][0].sector) {
+        if(loop[y] == 'Criptomoedas'){
           if (contador == 0) {
             dadosJson +=
               '{"name": "' +
@@ -349,20 +265,95 @@ function showData(tipo, res) {
               arrayMain[x][0].dividendo +
               '"}';
           }
-          if (arrayMain[z] != undefined) {
-            if (loop[y] != arrayMain[z][0].sector) {
-              dadosJson += "]}, ";
-            }
+        }else{
+          if (contador == 0) {
+            dadosJson +=
+              '{"name": "' +
+              loop[y] +
+              '", "children" :[{"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc
+                .replace(/\./g, "")
+                .replace(/\,/g, ".") +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
           } else {
-            dadosJson += "]}";
+            dadosJson +=
+              ', {"name" :"' +
+              arrayMain[x][0].name +
+              '","price" :"' +
+              arrayMain[x][0].price +
+              '","pc" :"' +
+              arrayMain[x][0].pc
+                .replace(/\./g, "")
+                .replace(/\,/g, ".") +
+              '", "volume": "' +
+              arrayMain[x][0].volume +
+              '", "idsector": ' +
+              arrayMain[x][0].idsector +
+              ', "type": "' +
+              arrayMain[x][0].type +
+              '", "name_asset": "' +
+              arrayMain[x][0].name_asset +
+              '", "max": "' +
+              arrayMain[x][0].max +
+              '", "min": "' +
+              arrayMain[x][0].min +
+              '", "update": "' +
+              arrayMain[x][0].update +
+              '", "research": "' +
+              arrayMain[x][0].research +
+              '", "sector": "' +
+              arrayMain[x][0].sector +
+              '", "pvpa": "' +
+              arrayMain[x][0].pvpa +
+              '", "yield": "' +
+              arrayMain[x][0].yield +
+              '", "dividendo": "' +
+              arrayMain[x][0].dividendo +
+              '"}';
           }
-          contador++;
         }
+        if (arrayMain[z] != undefined) {
+          if (loop[y] != arrayMain[z][0].sector) {
+            dadosJson += "]}, ";
+          }
+        } else {
+          dadosJson += "]}";
+        }
+        contador++;
       }
     }
-
-    dadosJson += "]}";
   }
+
+
+  dadosJson += "]}";
 
   let data = JSON.parse(dadosJson);
 
@@ -695,7 +686,9 @@ function showData(tipo, res) {
         function getRandomArbitrary(min, max) {
           return Math.random() * (max - min) + min;
         }
-
+        if (tipo == "favoritos") {
+          return 9999999; 
+        }
         if (d.type == "outros") {
           if (d.volume < 9999999) {
             return d.volume;
