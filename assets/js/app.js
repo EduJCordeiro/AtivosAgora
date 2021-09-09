@@ -36,36 +36,75 @@ function setSelect(tipo) {
   localStorage.setItem("selectOptions", $("#select").val());
   showTreemap(tipo);
 }
-
+var initial;
 function showTreemap(tipo) {
+
+
+  clearTimeout( initial )    
+
   let url;
   if(tipo == 'crypto'){
     url = 'https://api.ativosagora.com.br/api/v1/crypto';
   }else{
     url = 'https://api.ativosagora.com.br/api/v1/finance';
   }
-  fetch('https://api.ativosagora.com.br/api/v1/finance', {
-    method: "GET",
-  })
-  .then(function (response) {
-    response.json().then(function (res) {
 
-      fetch('https://api.ativosagora.com.br/api/v1/crypto', {
-        method: "GET",
-      })
-      .then(function (response1) {
-        response1.json().then(function (res_crypto) {
-          showData(tipo, res, res_crypto);
-        });
-      })
-      .catch(function (err) {
-        console.error(err);
+  if(tipo == 'crypto'){
+    initial = setTimeout(() => {
+      showTreemap('crypto');
+    }, 6000);
+
+    fetch('https://api.ativosagora.com.br/api/v1/crypto', {
+      method: "GET",
+    })
+    .then(function (response) {
+      response.json().then(function (res) {
+        showData(tipo, '', res);
       });
+    })
+    .catch(function (err) {
+      console.error(err);
     });
-  })
-  .catch(function (err) {
-    console.error(err);
-  });
+  }
+
+  if(tipo != "favoritos" && tipo != 'crypto'){
+    fetch('https://api.ativosagora.com.br/api/v1/finance', {
+      method: "GET",
+    })
+    .then(function (response) {
+      response.json().then(function (res) {
+        showData(tipo, res, '');
+      });
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  if(tipo == 'favoritos'){
+    fetch('https://api.ativosagora.com.br/api/v1/finance', {
+      method: "GET",
+    })
+    .then(function (response) {
+      response.json().then(function (res) {
+  
+        fetch('https://api.ativosagora.com.br/api/v1/crypto', {
+          method: "GET",
+        })
+        .then(function (response1) {
+          response1.json().then(function (res_crypto) {
+            showData(tipo, res, res_crypto);
+          });
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+      });
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+  }
 }
 
 function getColor(variation) {
@@ -104,91 +143,96 @@ function showData(tipo, res, res_crypto) {
   var ids = res.data;
   var ids_crypto = res_crypto.data;
 
-  ids.forEach((id, index) => {
-    let arrayDados = [];
-    
-    if (id.type == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.asset))) {
-      if (id.name == 0) {
-        var option = id.asset;
-      } else {
-        var option = id.name;
-      }
-      selects.push([option, id.asset]);
-      if (
-        localStorage.getItem("selectOptions").includes(id.asset) ||
-        localStorage.getItem("selectOptions") == ""
-      ) {
-        if (!loop.includes(id.sector)) {
-          loop.push(id.sector);
+  if(res != ''){
+    ids.forEach((id, index) => {
+      let arrayDados = [];
+      
+      if (id.type == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.asset))) {
+        if (id.name == 0) {
+          var option = id.asset;
+        } else {
+          var option = id.name;
         }
-
-        let volume = id.volume;
-
-        if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
-          volume = 99999999;
-        }
-
-        arrayDados.push({
-          idsector: id.idsector,
-          sector: id.sector,
-          name: id.asset,
-          price: id.price,
-          pc: id.variation,
-          volume: volume,
-          type: id.type,
-          name_asset: id.name,
-          max: id.max,
-          min: id.min,
-          update: id.update,
-          research: id.research,
-          pvpa: id.pvpa,
-          yield: id.yield,
-          dividendo: id.dividendo,
-        });
-        arrayMain.push(arrayDados);
-      }
-    }
-  });
-
-  ids_crypto.forEach((id, index) => {
-    if(id.symbol.includes('USDT', 1)){
-      if ('crypto' == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.symbol.replace('USDT', '/USD')))) {
-        selects.push([id.symbol.replace('USDT', ''), id.symbol]);
-
+        selects.push([option, id.asset]);
         if (
-          localStorage.getItem("selectOptions").includes(id.symbol.replace('USDT', '/USD')) ||
+          localStorage.getItem("selectOptions").includes(id.asset) ||
           localStorage.getItem("selectOptions") == ""
         ) {
-          if (!loop.includes('Criptomoedas')) {
-            loop.push('Criptomoedas');
+          if (!loop.includes(id.sector)) {
+            loop.push(id.sector);
           }
 
-          
-          let arrayDados = [];
-          if(id.lastPrice > 0){
-            arrayDados.push({
-              idsector: 27,
-              sector: 'Criptomoedas',
-              name: id.symbol.replace('USDT', '/USD'),
-              price: '$'+number_format(id.lastPrice, 2, ',', '.'),
-              pc: (id.priceChangePercent/100),
-              volume: id.quoteVolume,
-              type: 'crypto',
-              name_asset: id.symbol.replace('USDT', ''),
-              max: '$'+number_format(id.highPrice, 2, ',', '.'),
-              min: '$'+number_format(id.lowPrice, 2, ',', '.'),
-              update: '',
-              research: id.symbol,
-              pvpa: '',
-              yield: '',
-              dividendo: '',
-            });
-            arrayMain.push(arrayDados);
+          let volume = id.volume;
+
+          if (tipo == "favoritos" && favoritos_ativo.includes(id.asset)) {
+            volume = 99999999;
+          }
+
+          arrayDados.push({
+            idsector: id.idsector,
+            sector: id.sector,
+            name: id.asset,
+            price: id.price,
+            pc: id.variation,
+            volume: volume,
+            type: id.type,
+            name_asset: id.name,
+            max: id.max,
+            min: id.min,
+            update: id.update,
+            research: id.research,
+            pvpa: id.pvpa,
+            yield: id.yield,
+            dividendo: id.dividendo,
+          });
+          arrayMain.push(arrayDados);
+        }
+      }
+    });
+  }
+
+  if(res_crypto != ''){
+    ids_crypto.forEach((id, index) => {
+      if(id.symbol.includes('USDT', 1)){
+        if ('crypto' == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.symbol.replace('USDT', '/USD')))) {
+          selects.push([id.symbol.replace('USDT', ''), id.symbol]);
+  
+          if (
+            localStorage.getItem("selectOptions").includes(id.symbol.replace('USDT', '/USD')) ||
+            localStorage.getItem("selectOptions") == ""
+          ) {
+            if (!loop.includes('Criptomoedas')) {
+              loop.push('Criptomoedas');
+            }
+  
+            
+            let arrayDados = [];
+            if(id.lastPrice > 0){
+              arrayDados.push({
+                idsector: 27,
+                sector: 'Criptomoedas',
+                name: id.symbol.replace('USDT', '/USD'),
+                price: '$'+number_format(id.lastPrice, 2, ',', '.'),
+                pc: (id.priceChangePercent/100),
+                volume: id.quoteVolume,
+                type: 'crypto',
+                name_asset: id.symbol.replace('USDT', ''),
+                max: '$'+number_format(id.highPrice, 2, ',', '.'),
+                min: '$'+number_format(id.lowPrice, 2, ',', '.'),
+                update: '',
+                research: id.symbol,
+                pvpa: '',
+                yield: '',
+                dividendo: '',
+              });
+              arrayMain.push(arrayDados);
+            }
           }
         }
       }
-    }
-  });
+    });
+  }
+
   
   for (var y = 0; y < loop.length; y++) {
     var contador = 0;
