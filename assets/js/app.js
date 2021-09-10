@@ -195,7 +195,7 @@ function showData(tipo, res, res_crypto) {
     ids_crypto.forEach((id, index) => {
       if(id.symbol.includes('USDT', 1)){
         if ('crypto' == tipo || (tipo == "favoritos" && favoritos_ativo.includes(id.symbol.replace('USDT', '/USD')))) {
-          selects.push([id.symbol.replace('USDT', ''), id.symbol]);
+          selects.push([id.symbol.replace('USDT', ''), id.symbol.replace('USDT', '/USD')]);
   
           if (
             localStorage.getItem("selectOptions").includes(id.symbol.replace('USDT', '/USD')) ||
