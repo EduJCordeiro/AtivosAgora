@@ -42,23 +42,23 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" onclick="loadPage(this.id);" id="outros">Índices e Hedges</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="index">Índices e Hedges</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="loadPage(this.id);" id="asset">Ações</a>
+                    <a class="nav-link" href="acoes">Ações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="loadPage(this.id);" id="fii">Fundos Imobiliários</a>
+                    <a class="nav-link" href="fiis">Fundos Imobiliários</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="loadPage(this.id);" id="crypto">Criptomoedas</a>
+                    <a class="nav-link" href="criptomoedas">Criptomoedas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="loadPage(this.id);" id="etf_br">ETFs Brasil</a>
+                    <a class="nav-link" href="etfs">ETFs Brasil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="loadPage(this.id);" id="favoritos">Favoritos</a>
+                    <a class="nav-link" href="favoritos">Favoritos</a>
                 </li>
             </ul>
             <select class="js-example-placeholder-multiple js-states form-control" multiple="" id="select" onchange="setSelect(sessionStorage.getItem('view'))"></select>
@@ -95,6 +95,8 @@
 </div>
 <div id="modals"></div>
 <script>
+    loadPage('outros');
+
     function loadPage(id){
         $('#chart').html(`
             <div class="loading">
