@@ -119,7 +119,7 @@ nav .page{
 }
 .tables .table{
   width: 20%;
-  min-width: 300px;
+  min-width: auto;
   margin: 10px 2.5%;
   float: left;
   background: #212529;
@@ -151,7 +151,7 @@ nav .page{
   border-top: none;
 }
 .tables .table .first_down{
-  border-top: 4px double #878787;
+  border-top: 4px double #383838;
 }
 .tables .table .assets .line .asset{
   font-size: 16px;
@@ -159,20 +159,21 @@ nav .page{
   width: 33.33%;
   float: left;
   text-align: left;
+  padding: 5.5px 0;
 }
 .tables .table .assets .line .price{
   font-size: 14px;
   width: 42.66%;
   float: left;
   text-align: center;
-  padding: 9.4px 0;
+  padding: 7px 0;
 }
 .tables .table .assets .line .variation{
   font-size: 14px;
   width: 24%;
   float: left;
   text-align: right;
-  padding: 9.4px 0;
+  padding: 7px 0;
   font-weight: bold;
 }
 .var_up{
@@ -230,7 +231,11 @@ footer .email{
   display: block;
   padding: 10px;
 }
-
+@media (max-width: 1900px){
+  .tables .table{
+    min-width: 600px;
+  }
+}
 @media (max-width: 1600px){
   .home .page .title span{
     font-size: 40px;
@@ -239,9 +244,9 @@ footer .email{
     font-size: 20px;
   }
 }
-@media (max-width: 1520px){
-  .tables{
-    justify-content: space-between;
+@media (max-width: 1400px){
+  .tables .table{
+    min-width: 500px;
   }
 }
 @media (max-width: 1300px){
@@ -252,12 +257,9 @@ footer .email{
     font-size: 15px;
   }
 }
-@media (max-width: 1073px){
-  .tables{
-    justify-content: center;
-  }
+@media (max-width: 1140px){
   .tables .table{
-    margin: 10px 5%;
+    min-width: 400px;
   }
 }
 @media (max-width: 1000px){
@@ -281,6 +283,11 @@ footer .email{
     width: 100%;
     margin: 130px auto;
     text-align: center;
+  }
+}
+@media (max-width: 910px){
+  .tables .table{
+    min-width: 80%;
   }
 }
 @media (max-width: 780px){
@@ -315,6 +322,27 @@ footer .email{
   .imgPage img{
     width: 375px;
     top: 500px;
+  }
+  .tables .table .assets .line .asset{
+    font-size: 12px;
+  }
+  .tables .table .assets .line .price{
+    font-size: 10px;
+  }
+  .tables .table .assets .line .variation{
+    font-size: 10px;
+  }
+}
+@media (max-width: 400px){
+  .tables .table .assets .line .asset{
+    font-size: 9px;
+    padding: 7px 0;
+  }
+  .tables .table .assets .line .price{
+    font-size: 9px;
+  }
+  .tables .table .assets .line .variation{
+    font-size: 9px;
   }
 }
 @media (max-width: 300px){
