@@ -1,7 +1,335 @@
 * {
+  margin: 0;
+  padding: 0;
     font-family: 'Vazir', sans-serif;
 }
-  
+.home{
+  background-image: url(../../images/background2.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+main{
+  position: relative;
+}
+.page{
+  width: 50%;
+  margin: 0 auto;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  padding: 0 20px;
+}
+.content{
+  display: grid;
+  padding-bottom: 90px;
+  padding-top: 50px;
+}
+nav .page{
+  display: flex;
+  justify-content: space-between;
+}
+.home .page .title span{
+  color: #fff;
+  font-size: 50px;
+}
+.home .page .description p{
+  color: #fff;
+  margin-top: 40px;
+  line-height: 1.7;
+  font-size: 25px;
+}
+.content .title{
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    padding: 40px;
+}
+.imgPage img{
+  position: absolute;
+  padding-right: 50px;
+  width: 50%;
+  transform: translateY(-50%);
+}
+.btnHome{
+  padding: 10px 15px;
+  background: #212529;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  margin-top: 40px;
+  transition: transform .2s;
+}
+.btnContent{
+  padding: 5px 15px;
+  background: #212529;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  margin: 20px 20px 30px 20px;
+  font-size: 14px;
+  transition: transform .2s;
+}
+.btnContent:hover{
+  transform: scale(1.04);
+}
+.btnHome:hover{
+  transform: scale(1.02);
+}
+.arrow_page{
+	-webkit-animation: slide-bottom 1s linear infinite alternate ;
+  animation: slide-bottom 1s linear infinite alternate ;
+  color: #fff;
+  position: absolute;
+  bottom: 20px;
+}
+
+@-webkit-keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(10px);
+            transform: translateY(10px);
+  }
+}
+@keyframes slide-bottom {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(10px);
+            transform: translateY(10px);
+  }
+}
+.tables{
+  width: 100%;
+  padding-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tables .table{
+  width: 20%;
+  min-width: 300px;
+  margin: 10px 2.5%;
+  float: left;
+  background: #212529;
+  border-radius: 5px;
+  border: 1px solid #878787;
+  color: #fff;
+  text-align: center;
+}
+.tables .table .title{
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  padding: 15px;
+}
+.tables .table .assets{
+  float: left;
+  width: 100%;
+}
+.tables .table .line{
+  width: 90%;
+  margin-left: 5%;
+  float: left;
+  background: none;
+  border-top: 1px solid #878787;
+  padding: 5px;
+}
+.tables .table .first_line{
+  border-top: none;
+}
+.tables .table .first_down{
+  border-top: 4px double #878787;
+}
+.tables .table .assets .line .asset{
+  font-size: 16px;
+  font-weight: bold;
+  width: 33.33%;
+  float: left;
+  text-align: left;
+}
+.tables .table .assets .line .price{
+  font-size: 14px;
+  width: 33.33%;
+  float: left;
+  text-align: center;
+  padding: 9.4px 0;
+}
+.tables .table .assets .line .variation{
+  font-size: 14px;
+  width: 33.33%;
+  float: left;
+  text-align: right;
+  padding: 9.4px 0;
+  font-weight: bold;
+}
+.var_up{
+  color: #518652;
+}
+.var_down{
+  color: #C84041;
+}
+footer{
+  height: 50px;
+  background: #1A1D20;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  display: flex!important;
+  color: #707070;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  -webkit-box-shadow: 0px 2px 11px 1px #000000!important;
+  box-shadow: 0px 2px 11px 1px #000000!important;
+}
+footer .copy{
+  font-size: 10px;
+}
+footer .email{
+  font-size: 14px;
+}
+.email a{
+  margin-left: 5px;
+  color: #fff;
+}
+.email a{
+  margin-left: 5px;
+  color: #fff;
+}
+.email a:hover{
+  color: #878787;
+}
+.empty{
+  color: #878787;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 20px;
+}
+.empty b{
+  font-size: 30px;
+  display: block;
+}
+.empty span{
+  font-size: 15px;
+  display: block;
+  padding: 10px;
+}
+
+@media (max-width: 1600px){
+  .home .page .title span{
+    font-size: 40px;
+  }
+  .home .page .description p{
+    font-size: 20px;
+  }
+}
+@media (max-width: 1520px){
+  .tables{
+    justify-content: space-between;
+  }
+}
+@media (max-width: 1300px){
+  .home .page .title span{
+    font-size: 35px;
+  }
+  .home .page .description p{
+    font-size: 15px;
+  }
+}
+@media (max-width: 1073px){
+  .tables{
+    justify-content: center;
+  }
+  .tables .table{
+    margin: 10px 5%;
+  }
+}
+@media (max-width: 1000px){
+  .home .page .title span{
+    font-size: 50px;
+  }
+  .home .page .description p{
+    font-size: 25px;
+  }
+  .imgPage img{
+    width: 650px;
+    top: 450px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+  }
+  .home{
+    align-items: baseline;
+  }
+  .page{
+    width: 100%;
+    margin: 130px auto;
+    text-align: center;
+  }
+}
+@media (max-width: 780px){
+  .home .page .title span{
+    font-size: 40px;
+  }
+  .home .page .description p{
+    font-size: 20px;
+  }
+  .imgPage img{
+    width: 600px;
+  }
+}
+@media (max-width: 620px){
+  .home .page .title span{
+    font-size: 35px;
+  }
+  .home .page .description p{
+    font-size: 20px;
+  }
+  .imgPage img{
+    width: 500px;
+  }
+}
+@media (max-width: 550px){
+  .home .page .title span{
+    font-size: 30px;
+  }
+  .home .page .description p{
+    font-size: 15px;
+  }
+  .imgPage img{
+    width: 375px;
+    top: 500px;
+  }
+}
+@media (max-width: 300px){
+  .home .page .title span{
+    font-size: 30px;
+  }
+  .home .page .description p{
+    font-size: 15px;
+  }
+  .imgPage img{
+    width: 275px;
+    top: 550px;
+  }
+}
+
 @keyframes divs-loading{
   0% { transform: scale(1.1500000000000001) }
   100% { transform: scale(1) }
@@ -245,7 +573,9 @@ body{
 }
 .nav-link{
   cursor: pointer;
-  margin-right: 10px;
+}
+.nav-item{
+  margin: 0 5px;
 }
 .active{
   border-bottom: 1px solid #F7F4F8;
