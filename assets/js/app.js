@@ -556,8 +556,8 @@ function showData(tipo, res, res_crypto) {
                           <input type="hidden" value="${tipo}" id="tipo">
                           <div class="modal-header">
                             <div class="starFav">
-                              <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}', ${tipo})" class="far fa-star"></i></div>
-                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}', ${tipo})" class="fas fa-star"></i></div>
+                              <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
+                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}')" class="fas fa-star"></i></div>
                             </div>
                               <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.name}</h5>
                           </div>
