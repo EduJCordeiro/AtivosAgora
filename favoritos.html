@@ -43,6 +43,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
+                    <a class="nav-link" href="/index">Início</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/indices">Índices e Hedges</a>
                 </li>
                 <li class="nav-item">
@@ -65,6 +68,10 @@
         </div>
     </div>
 </nav>
+<div class="empty" id="empty" style="display: none">
+    <b>Nenhum ativo adicionado aos favoritos!</b>
+    <span>Adicione e visualize seus principais ativos de forma mais rápida.</span>
+</div>
 <div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
     <div style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
         <div class="loading">
@@ -91,10 +98,36 @@
 </div>
 <div id="tips" class="ftr">
     <span class="tips">💡 Clique duas vezes no ativo para ver mais informações sobre ele! 😉</span>
-    <span class="email">Fale conosco: ativosagora@gmail.com &nbsp;&nbsp;<a target="_blank" title="Twitter" href="https://twitter.com/AtivosAgora" class="fab fa-twitter"></a></span>
+    <span class="email">Confira nossas redes sociais:
+        &nbsp;&nbsp;
+        <a target="_blank" title="Twitter" href="https://twitter.com/AtivosAgora" class="fab fa-twitter"></a>
+        <a target="_blank" title="Instagram" href="https://instagram.com/ativosagora" class="fab fa-instagram"></a>
+    </span>
 </div>
 <div id="modals"></div>
 <script>
+
+if (localStorage.getItem("favoritos_ativo") === null || localStorage.getItem("favoritos_ativo") == 0) {
+            
+    sessionStorage.setItem("view", "favoritos");
+
+    document.getElementById("select").style.display = "none";
+    document.getElementById("empty").style.display = "block";
+
+    $('.nav-link').removeClass(`active`);
+    $('#favoritos').addClass(`active`);
+
+    localStorage.setItem("selectOptions", "");
+    localStorage.setItem("controlSelect", 0);
+
+    $('#select option:enabled').remove();
+
+    $(".loading").remove();
+    $("#menunav").show();
+
+
+
+}else{
     loadPage('favoritos');
 
     function loadPage(id){
@@ -143,6 +176,7 @@
     $(".js-example-placeholder-multiple").select2({
         placeholder: "Pesquisar"
     });
+}
 
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
