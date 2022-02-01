@@ -212,7 +212,7 @@ function showData(tipo, res, res_crypto) {
                 idsector: 27,
                 sector: 'Criptomoedas',
                 name: id.symbol.replace('USDT', '/USD'),
-                price: '$'+number_format(id.lastPrice, 2, ',', '.'),
+                price: '$'+number_format(id.lastPrice, 2, '.', ','),
                 pc: (id.priceChangePercent/100),
                 volume: id.quoteVolume,
                 type: 'crypto',
