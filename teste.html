@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ativos Agora | Índices e Hedges</title>
+    <title>Ativos Agora</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="images/favicon.png"/>
@@ -34,71 +34,122 @@
     gtag('config', 'G-YQJNTQS318');
 </script>
 <body>
-<nav style="display: none;" id="menunav" class="navbar navbar-expand-lg navbar-dark navbar-style">
+<nav id="nav" style="position: fixed;" class="navbar navbar-expand-lg navbar-dark navbar-style">
     <div class="container-fluid">
-        <a class="navbar-brand nav-link" aria-current="page" id="resetButton"><img src="images/logo.png" alt="Loading"></a>
+        <a class="navbar-brand nav-link" href="#home"><img src="images/logo.png" alt="Loading"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/indices">Índices e Hedges</a>
+                    <a class="nav-link" href="#home">Início</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/acoes">Ações</a>
+                    <a class="nav-link" href="indices.html">Índices e Hedges</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/fiis">Fundos Imobiliários</a>
+                    <a class="nav-link" href="acoes.html">Ações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/criptomoedas">Criptomoedas</a>
+                    <a class="nav-link" href="fiis.html">Fundos Imobiliários</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/etfs">ETFs Brasil</a>
+                    <a class="nav-link" href="criptomoedas.html">Criptomoedas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/favoritos">Favoritos</a>
+                    <a class="nav-link" href="etfs.html">ETFs Brasil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="favoritos.html">Favoritos</a>
                 </li>
             </ul>
-            <select class="js-example-placeholder-multiple js-states form-control" multiple="" id="select" onchange="setSelect(sessionStorage.getItem('view'))"></select>
         </div>
     </div>
 </nav>
-<div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
-    <div style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
-        <div class="loading">
-            <div class="master-loading">
-                <div class="divs-loading">
-                    <div></div><div></div><div></div><div></div>
-                </div>
+<main>
+    <header id="home" class="home">
+        <div class="page">
+            <div class="title"><span>Vigie o mercado financeiro</span></div>
+            <div class="description">
+                <p>Monitoramento em tempo real de ativos financeiros <br> <b>totalmente gratuito</b></p>
             </div>
-            <span>Carregando...</span>
+            <a href="#content"><button class="btnHome">Veja o top 5 ativos financeiros em alta e em baixa</button></a>
         </div>
-    </div>
-</div>
-<div class="parent" style="overflow: hidden; user-select: none; touch-action: none; transform: scale(1);">
-    <div id="chart" style="cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none 0s ease 0s; transform: scale(1) translate(0px, 0x);">
-        <div class="loading">
-            <div class="master-loading">
-                <div class="divs-loading">
-                    <div></div><div></div><div></div><div></div>
-                </div>
+        <div class="imgPage">
+            <img src="images/webpage.png" alt="webpage">
+        </div>
+        <a href="#content"><i class="fas fa-angle-double-down arrow_page"></i></a>
+    </header>
+    <section id="content" class="content">
+        <div class="title">Top 5 ativos financeiros em alta e em baixa</div>
+        <div class="tables">
+            <div class="table">
+                <div class="title">Ações</div>
+                <div id="asset"></div>
+                <a href="acoes.html"><button class="btnContent">Visualizar mapa</button></a>
             </div>
-            <span>Carregando...</span>
+            <div class="table">
+                <div class="title">Fundos Imobiliários</div>
+                <div id="fii"></div>
+                <a href="fiis.html"><button class="btnContent">Visualizar mapa</button></a>
+            </div>
+            <div class="table">
+                <div class="title">Criptomoedas</div>
+                <div id="crypto"></div>
+                <a href="criptomoedas.html"><button class="btnContent">Visualizar mapa</button></a>
+            </div>
+            <div class="table">
+                <div class="title">ETFs Brasil</div>
+                <div id="etf_br"></div>
+                <a href="etfs.html"><button class="btnContent">Visualizar mapa</button></a>
+            </div>
         </div>
-    </div>
-</div>
-<div id="tips" class="ftr">
-    <span class="tips">💡 Clique duas vezes no ativo para ver mais informações sobre ele! 😉</span>
-    <span class="email">Fale conosco: ativosagora@gmail.com &nbsp;&nbsp;<a target="_blank" title="Twitter" href="https://twitter.com/AtivosAgora" class="fab fa-twitter"></a></span>
-</div>
-<div id="modals"></div>
+    </section>
+<footer>
+    <span class="copy">Copyright © 2022 - Todos os direitos reservados</span>
+    <span class="email">Confira nossas redes sociais:
+        &nbsp;&nbsp;
+        <a target="_blank" title="Twitter" href="https://twitter.com/AtivosAgora" class="fab fa-twitter"></a>
+        <a target="_blank" title="Instagram" href="https://instagram.com/ativosagora" class="fab fa-instagram"></a>
+    </span>
+</footer>
+</main>
 <script>
-    showTopFive('asset');
-    showTopFive('fii');
-    showTopFive('crypto');
-    showTopFive('etf_br');
+
+function sizeOfThings(){
+    
+    var windowHeight = window.innerHeight;
+  
+    document.getElementById("home").style.height = windowHeight+"px";
+};
+
+sizeOfThings();
+
+window.addEventListener('resize', function(){
+	sizeOfThings();
+});
+
+window.onscroll = function() {myFunction()};
+
+function myFunction() {
+  if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+    document.getElementById("nav").style.background = "#005682";
+  } else {
+    document.getElementById("nav").style.background = "none";
+  }
+}
+
+showTopFive('asset');
+showTopFive('fii');
+showTopFive('crypto');
+showTopFive('etf_br');
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-YQJNTQS318');
 </script>
 </body>
 </html>

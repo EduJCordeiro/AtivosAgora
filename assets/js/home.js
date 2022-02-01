@@ -222,6 +222,8 @@ function showData(tipo, res, res_crypto) {
 
     let dataMin = sortedInput.slice(Math.max(sortedInput.length - 5, 0));
 
+    let div = '<div class="assets">';
+
     dataMax.forEach((data, index) => {
         let variation;
 
@@ -231,7 +233,18 @@ function showData(tipo, res, res_crypto) {
             variation = `<div class="var_up variation">+${(data.pc * 100).toFixed(2).replace(".", ",")}%</div>`;
         }
 
-        console.log(data.name, data.price, variation)
+        if(index == 0){
+            div += '<div class="line first_Line">';
+        }else{
+            div += '<div class="line">';
+        }
+
+        div += `<div class="asset">${data.name}</div>
+            <div class="price">${data.price}</div>
+            ${variation}
+        </div>`;
+
+        // console.log(data.name, data.price, variation)
     })
 
     console.log('')
@@ -247,12 +260,24 @@ function showData(tipo, res, res_crypto) {
             variation = `<div class="var_up variation">+${(data.pc * 100).toFixed(2).replace(".", ",")}%</div>`;
         }
 
-        console.log(data.name, data.price, variation)
+        if(index == 0){
+            div += '<div class="line first_down">';
+        }else{
+            div += '<div class="line">';
+        }
+
+        div += `<div class="asset">${data.name}</div>
+            <div class="price">${data.price}</div>
+            ${variation}
+        </div>`;
+
+        // console.log(data.name, data.price, variation)
     })
 
-    console.log('')
-    console.log('')
-    console.log('')
-    console.log('')
+    div += '</div>';
+
+    console.log(`#${tipo}`);
+
+    $(`#${tipo}`).html(div);
 }
   
