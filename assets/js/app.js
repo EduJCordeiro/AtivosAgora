@@ -488,7 +488,7 @@ function showData(tipo, res, res_crypto) {
                         <div class="modal-header">
                           <div class="starFav">
                             <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
-                            <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}')" class="fas fa-star"></i></div>
+                            <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}', '${tipo}')" class="fas fa-star"></i></div>
                           </div>
                             <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.name}</h5>
                         </div>
@@ -557,7 +557,7 @@ function showData(tipo, res, res_crypto) {
                           <div class="modal-header">
                             <div class="starFav">
                               <div id="fav" class="tooltip-right" tooltip-text="Adicionar aos favoritos"><i onclick="fav('${d.data.name}')" class="far fa-star"></i></div>
-                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}')" class="fas fa-star"></i></div>
+                              <div id="disfav" style='display:none' class="tooltip-right" tooltip-text="Remover dos favoritos"><i onclick="disfav('${d.data.name}', '${tipo}')" class="fas fa-star"></i></div>
                             </div>
                               <h5 class="modal-title modal-details-title" id="ModalLabel">${d.data.name}</h5>
                           </div>
@@ -839,7 +839,7 @@ function fav(ativo) {
   });
 }
 
-function disfav(ativo) {
+function disfav(ativo, tipo) {
   favoritos_ativo = favoritos_ativo.filter((item) => item !== ativo);
   localStorage.setItem("favoritos_ativo", favoritos_ativo);
 
@@ -852,6 +852,29 @@ function disfav(ativo) {
     bgcolor: "#00B55E",
     color: "#FFF",
   });
+
+  if(tipo == 'favoritos'){
+    closeModal($("#tipo").val());
+
+    if (localStorage.getItem("favoritos_ativo") === null || localStorage.getItem("favoritos_ativo") == 0) {
+            
+      sessionStorage.setItem("view", "favoritos");
+  
+      document.getElementById("select").style.display = "none";
+      document.getElementById("empty").style.display = "block";
+  
+      $('.nav-link').removeClass(`active`);
+      $('#favoritos').addClass(`active`);
+  
+      localStorage.setItem("selectOptions", "");
+      localStorage.setItem("controlSelect", 0);
+  
+      $('#select option:enabled').remove();
+  
+      $(".loading").remove();
+      $("#menunav").show();
+    }
+  }
 }
 
 window.addEventListener("keydown", function (e) {
