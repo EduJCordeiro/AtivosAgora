@@ -111,7 +111,6 @@ if (localStorage.getItem("favoritos_ativo") === null || localStorage.getItem("fa
             
     sessionStorage.setItem("view", "favoritos");
 
-    document.getElementById("select").style.display = "none";
     document.getElementById("empty").style.display = "block";
     document.getElementById("chart").style.cursor = "auto";
 
@@ -122,6 +121,11 @@ if (localStorage.getItem("favoritos_ativo") === null || localStorage.getItem("fa
     localStorage.setItem("controlSelect", 0);
 
     $('#select option:enabled').remove();
+
+    
+    $(".js-example-placeholder-multiple").select2({
+        placeholder: "Pesquisar"
+    });
 
     $(".loading").remove();
     $("#menunav").show();
