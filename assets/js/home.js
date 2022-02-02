@@ -25,6 +25,14 @@ function number_format (number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
+localStorage.setItem("selectOptions", "");
+localStorage.setItem("controlSelect", "0");
+
+if (localStorage.getItem("favoritos_ativo") === null) {
+    localStorage.setItem("favoritos_ativo", "0");
+}
+
+
 var initial;
 function showTopFive(tipo) {
     clearTimeout( initial )    
