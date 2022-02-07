@@ -239,6 +239,17 @@ function showData(tipo, res, res_crypto) {
     for (var x = 0; x < arrayMain.length; x++) {
       var z = parseInt(x) + parseInt(1);
       if (loop[y] == arrayMain[x][0].sector) {
+
+        if(arrayMain[x][0].price.includes("R$")){
+          var preco = arrayMain[x][0].price;
+          var max = arrayMain[x][0].max;
+          var min = arrayMain[x][0].min;
+        }else{
+          var preco = arrayMain[x][0].price.replace(/\./g, "=").replace(/\,/g, ".").replace(/\=/g, ",");
+          var max = arrayMain[x][0].max.replace(/\./g, "=").replace(/\,/g, ".").replace(/\=/g, ",");
+          var min = arrayMain[x][0].min.replace(/\./g, "=").replace(/\,/g, ".").replace(/\=/g, ",");
+        }
+
         if(loop[y] == 'Criptomoedas'){
           if (contador == 0) {
             dadosJson +=
@@ -317,7 +328,7 @@ function showData(tipo, res, res_crypto) {
               '", "children" :[{"name" :"' +
               arrayMain[x][0].name +
               '","price" :"' +
-              arrayMain[x][0].price +
+              preco +
               '","pc" :"' +
               arrayMain[x][0].pc
                 .replace(/\./g, "")
@@ -331,9 +342,9 @@ function showData(tipo, res, res_crypto) {
               '", "name_asset": "' +
               arrayMain[x][0].name_asset +
               '", "max": "' +
-              arrayMain[x][0].max +
+              max +
               '", "min": "' +
-              arrayMain[x][0].min +
+              min +
               '", "update": "' +
               arrayMain[x][0].update +
               '", "research": "' +
@@ -352,7 +363,7 @@ function showData(tipo, res, res_crypto) {
               ', {"name" :"' +
               arrayMain[x][0].name +
               '","price" :"' +
-              arrayMain[x][0].price +
+              preco +
               '","pc" :"' +
               arrayMain[x][0].pc
                 .replace(/\./g, "")
@@ -366,9 +377,9 @@ function showData(tipo, res, res_crypto) {
               '", "name_asset": "' +
               arrayMain[x][0].name_asset +
               '", "max": "' +
-              arrayMain[x][0].max +
+              max +
               '", "min": "' +
-              arrayMain[x][0].min +
+              min +
               '", "update": "' +
               arrayMain[x][0].update +
               '", "research": "' +
